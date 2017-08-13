@@ -71,7 +71,7 @@ func (c *Config) RemoveValue(profile string, value string) bool {
 func (c *Config) Save(filename string) (bool, error) {
 	var err error
 
-	str, err := json.Marshal(c)
+	str, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return false, err
 	}
