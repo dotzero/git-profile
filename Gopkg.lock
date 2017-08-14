@@ -2,10 +2,22 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/logutils"
+  packages = ["."]
+  revision = "0dc08b1671f34c4250ce212759ebd880f743d883"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
   version = "v1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
 
 [[projects]]
   branch = "master"
@@ -22,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fd56cc1810ff527dc29fa5ac153938af6d8df6a405c953638f1275f24d6073d9"
+  inputs-digest = "a98dc006a9e468b58c3981351ff5806d8a2a1c59931ccaba1a6ecf725d4c27bf"
   solver-name = "gps-cdcl"
   solver-version = 1

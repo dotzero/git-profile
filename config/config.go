@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 // Entry is the entry in config file
@@ -93,6 +94,11 @@ func (c *Config) Save(filename string) (err error) {
 func (c *Config) Load(filename string) (err error) {
 	log.Println("[DEBUG] Load", filename)
 
+	err = c.ensureFile(filename)
+	if err != nil {
+		return err
+	}
+
 	body, err := c.readFile(filename)
 	if err != nil {
 		return err
@@ -106,14 +112,22 @@ func (c *Config) Load(filename string) (err error) {
 	return nil
 }
 
+func (c *Config) ensureFile(filename string) (err error) {
+	log.Println("[DEBUG] ensureFile", filename)
+	if _, err = os.Stat(filename); os.IsNotExist(err) {
+		err = c.Save(filename)
+	}
+	return
+}
+
 func (c *Config) writeFile(filename string, body []byte) (err error) {
-	log.Print("[DEBUG] writeFile", filename, body)
+	log.Println("[DEBUG] writeFile", filename, string(body))
 	err = ioutil.WriteFile(filename, body, 0644)
 	return
 }
 
 func (c *Config) readFile(filename string) (body []byte, err error) {
-	log.Print("[DEBUG] readFile", filename)
+	log.Println("[DEBUG] readFile", filename)
 	body, err = ioutil.ReadFile(filename)
 	return
 }
