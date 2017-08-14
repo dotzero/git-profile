@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/dotzero/git-profile/config"
 	"github.com/spf13/cobra"
 )
 
@@ -30,8 +29,6 @@ func delRun(cmd *cobra.Command, args []string) {
 
 	profile := args[0]
 
-	c := config.NewConfig()
-	c.Load(".gitprofile")
-	c.RemoveProfile(profile)
-	c.Save(".gitprofile")
+	сfgStorage.RemoveProfile(profile)
+	сfgStorage.Save(cfgFile)
 }

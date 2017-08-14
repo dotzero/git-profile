@@ -25,7 +25,7 @@ user profiles in your git repositories.`,
 
 func init() {
 	cobra.OnInitialize(initLogs, initConfig)
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.gitprofile)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "~/.gitprofile", "config file (default is $HOME/.gitprofile)")
 	rootCmd.PersistentFlags().BoolVarP(&isDebug, "debug", "d", false, "show debug log")
 }
 
@@ -49,16 +49,12 @@ func initLogs() {
 }
 
 func initConfig() {
-	сfgPath, err := homedir.Expand("~/.gitprofile")
-	if err != nil {
-		log.Println("[ERROR] Cannot obtain ~/.gitprofile")
-		os.Exit(1)
-	}
-
+	cfgFile, _ = homedir.Expand(cfgFile)
 	сfgStorage = config.NewConfig()
-	err = сfgStorage.Load(сfgPath)
+
+	err := сfgStorage.Load(cfgFile)
 	if err != nil {
-		log.Println("[ERROR] Cannot load json from ~/.gitprofile", err)
+		log.Println("[ERROR] Cannot load json from", cfgFile, err)
 		os.Exit(1)
 	}
 }

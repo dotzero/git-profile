@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -26,7 +25,7 @@ func init() {
 }
 
 func setRun(cmd *cobra.Command, args []string) {
-	if len(args) < 2 {
+	if len(args) != 2 || !strings.Contains(args[1], "=") {
 		cmd.Usage()
 		os.Exit(1)
 	}
@@ -35,10 +34,6 @@ func setRun(cmd *cobra.Command, args []string) {
 	kv := strings.Split(args[1], "=")
 	key, value := kv[0], kv[1]
 
-	fmt.Println(profile, key, value)
-
-	c := config.NewConfig()
-	c.Load(".gitprofile")
-	c.SetValue(profile, config.Entry{Key: key, Value: value})
-	c.Save(".gitprofile")
+	сfgStorage.SetValue(profile, config.Entry{Key: key, Value: value})
+	сfgStorage.Save(cfgFile)
 }

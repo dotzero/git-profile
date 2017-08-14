@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/dotzero/git-profile/config"
 	"github.com/dotzero/git-profile/git"
 	"github.com/spf13/cobra"
 )
@@ -34,10 +33,7 @@ func useRun(cmd *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 
-	c := config.NewConfig()
-	c.Load(".gitprofile")
-
-	entries, ok := c.GetProfile(args[0])
+	entries, ok := сfgStorage.GetProfile(args[0])
 	if !ok {
 		cmd.Printf("There is no profile with `%s` name", args[0])
 		os.Exit(0)
