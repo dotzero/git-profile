@@ -25,7 +25,7 @@ user profiles in your git repositories.`,
 
 func init() {
 	cobra.OnInitialize(initLogs, initConfig)
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "~/.gitprofile", "config file (default is $HOME/.gitprofile)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "~/.gitprofile", "config file")
 	rootCmd.PersistentFlags().BoolVarP(&isDebug, "debug", "d", false, "show debug log")
 }
 
