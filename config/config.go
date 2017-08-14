@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 )
 
 // Entry is the entry in config file
@@ -25,6 +26,7 @@ func NewConfig() *Config {
 
 // GetProfile gets a profile entries
 func (c *Config) GetProfile(profile string) ([]Entry, bool) {
+	log.Println("[DEBUG] GetProfile", profile)
 	entries, ok := c.Profiles[profile]
 	if ok {
 		return entries, true
@@ -35,12 +37,14 @@ func (c *Config) GetProfile(profile string) ([]Entry, bool) {
 
 // RemoveProfile removes a profile
 func (c *Config) RemoveProfile(profile string) bool {
+	log.Println("[DEBUG] RemoveProfile", profile)
 	delete(c.Profiles, profile)
 	return true
 }
 
 // SetValue adds an entry to profile
 func (c *Config) SetValue(profile string, entry Entry) bool {
+	log.Println("[DEBUG] SetValue", profile, entry)
 	c.RemoveValue(profile, entry.Key)
 	c.Profiles[profile] = append(c.Profiles[profile], entry)
 	return true
@@ -48,6 +52,7 @@ func (c *Config) SetValue(profile string, entry Entry) bool {
 
 // RemoveValue removes an entry from profile
 func (c *Config) RemoveValue(profile string, value string) bool {
+	log.Println("[DEBUG] RemoveValue", profile, value)
 	if _, ok := c.Profiles[profile]; !ok {
 		return false
 	}
@@ -68,35 +73,47 @@ func (c *Config) RemoveValue(profile string, value string) bool {
 }
 
 // Save profiles to json file
-func (c *Config) Save(filename string) (bool, error) {
-	var err error
+func (c *Config) Save(filename string) (err error) {
+	log.Println("[DEBUG] Save", filename)
 
-	str, err := json.MarshalIndent(c, "", "  ")
+	body, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	err = ioutil.WriteFile(filename, str, 0644)
+	err = c.writeFile(filename, body)
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
 // Load profiles from json file
-func (c *Config) Load(filename string) (bool, error) {
-	var err error
+func (c *Config) Load(filename string) (err error) {
+	log.Println("[DEBUG] Load", filename)
 
-	str, err := ioutil.ReadFile(filename)
+	body, err := c.readFile(filename)
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	err = json.Unmarshal(str, c)
+	err = json.Unmarshal(body, c)
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
+}
+
+func (c *Config) writeFile(filename string, body []byte) (err error) {
+	log.Print("[DEBUG] writeFile", filename, body)
+	err = ioutil.WriteFile(filename, body, 0644)
+	return
+}
+
+func (c *Config) readFile(filename string) (body []byte, err error) {
+	log.Print("[DEBUG] readFile", filename)
+	body, err = ioutil.ReadFile(filename)
+	return
 }
