@@ -4,19 +4,50 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dotzero/git-profile)](https://goreportcard.com/report/github.com/dotzero/git-profile)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/dotzero/git-profile/blob/master/LICENSE)
 
-Allows you to switch between multiple user profiles in git repositories
+Git Profile allows to add and switch between multiple user profiles in your git repositories.
 
-## Installing
+## Installation
 
- ```bash
-go get -u github.com/gesquive/git-user
+To install git-profile, you can download a [prebuilt binary](https://github.com/dotzero/git-profile/releases), or you can build it from source.
+
+### Prebuilt binaries
+
+Download the binary from the [releases](https://github.com/dotzero/git-profile/releases) page.
+
+### Building from source
+
+If your operating system does not have a binary release, but does run Go, you can build from source.
+
+Make sure that you have Go version 1.7 or greater and that your `GOPATH` env variable is set (I recommand setting it to `~/go` if you don't have one).
+
+```bash
+go get -u github.com/dotzero/git-profile
+cd $GOPATH/src/github.com/dotzero/git-profile
+make install
 ```
+
+The binary will then be installed to `$GOPATH/bin` (or your `$GOBIN`).
 
 ## Usage
 
+Add an entry to a profile
+
+```bash
+git profile add home user.name dotzero
+git profile add home user.email "mail@dotzero.ru"
+git profile add home user.signingkey AAAAAAAA
+...
 ```
-git profile set home user.email="mail@dotzero.ru"
-git profile set home user.name=dotzero
+
+List of profiles
+
+```bash
+git profile list
+```
+
+Use a profile
+
+```bash
 git profile use home
 ```
 
