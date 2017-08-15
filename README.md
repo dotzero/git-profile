@@ -22,8 +22,6 @@ Make sure that you have Go version 1.7 or greater and that your `GOPATH` env var
 
 ```bash
 go get -u github.com/dotzero/git-profile
-cd $GOPATH/src/github.com/dotzero/git-profile
-make install
 ```
 
 The binary will then be installed to `$GOPATH/bin` (or your `$GOBIN`).
@@ -36,19 +34,23 @@ Add an entry to a profile
 git profile add home user.name dotzero
 git profile add home user.email "mail@dotzero.ru"
 git profile add home user.signingkey AAAAAAAA
-...
 ```
 
-List of profiles
+List of available profiles
 
 ```bash
 git profile list
 ```
 
-Use a profile
+Apply the profile to current git repository
 
 ```bash
 git profile use home
+
+# Under the hood run runs following commands
+# git git config --local user.name dotzero
+# git git config --local user.email "mail@dotzero.ru"
+# git git config --local user.signingkey AAAAAAAA
 ```
 
 ## License
