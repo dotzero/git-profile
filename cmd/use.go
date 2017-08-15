@@ -10,12 +10,11 @@ import (
 var useCmd = &cobra.Command{
 	Use:     "use [profile]",
 	Aliases: []string{"u"},
-	Short:   "Use the profile",
-	Long: `Use the profile.
-
-Example:
-  git-profile use work`,
-	Run: useRun,
+	Short:   "Use a profile",
+	Long:    "Applies selected profile entries to current git repository.",
+	Example: "  git-profile use my-profile",
+	Args:    cobra.ExactArgs(1),
+	Run:     useRun,
 }
 
 func init() {
@@ -23,25 +22,22 @@ func init() {
 }
 
 func useRun(cmd *cobra.Command, args []string) {
-	if len(args) < 1 {
-		cmd.Usage()
-		os.Exit(0)
-	}
-
 	if !git.IsRepository() {
 		cmd.Println("Current directory is not a root of git repository.")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
-	entries, ok := сfgStorage.GetProfile(args[0])
+	profile := args[0]
+
+	entries, ok := сfgStorage.GetProfile(profile)
 	if !ok {
-		cmd.Printf("There is no profile with `%s` name", args[0])
+		cmd.Printf("There is no profile with `%s` name", profile)
 		os.Exit(0)
 	}
 
-	cmd.Printf("Applying profile with name `%s`:\n\n", args[0])
 	for _, entry := range entries {
-		cmd.Printf("\t%s = \"%s\"\n", entry.Key, entry.Value)
-		git.SetConfig(entry.Key, entry.Value)
+		git.SetLocalConfig(entry.Key, entry.Value)
 	}
+
+	cmd.Printf("Successfully applied `%s` profile to current git repository.", profile)
 }

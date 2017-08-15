@@ -11,14 +11,13 @@ import (
 var addCmd = &cobra.Command{
 	Use:     "add [profile] [key] [value]",
 	Aliases: []string{"set"},
-	Short:   "Add an entry to profile",
-	Long: `Adds an entry to profile or update exists profile.
-
-Example:
-  git-profile add my-profile user.email work@example.com
+	Short:   "Add an entry to a profile",
+	Long:    "Adds an entry to a profile or update exists profile.",
+	Example: `  git-profile add my-profile user.email work@example.com
   git-profile add my-profile user.name "John Doe"
   git-profile add my-profile user.signingkey AAAAAAAA`,
-	Run: addRun,
+	Args: cobra.ExactArgs(3),
+	Run:  addRun,
 }
 
 func init() {
@@ -26,11 +25,6 @@ func init() {
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-	if len(args) != 3 {
-		cmd.Usage()
-		os.Exit(1)
-	}
-
 	profile := args[0]
 	key := args[1]
 	value := args[2]

@@ -9,14 +9,13 @@ import (
 var delCmd = &cobra.Command{
 	Use:     "del [profile] [key]",
 	Aliases: []string{"rm"},
-	Short:   "Delete an entry or profile",
-	Long: `Delete an entry from profile or an entire profile.
-Provide a "key" argument to remove only that key from profile.
-
-Example:
-  git-profile del my-profile -> to delete an entire profile
+	Short:   "Delete an entry or a profile",
+	Long: `Delete an entry from a profile or an entire profile.
+Provide a "key" argument to remove only one key from a profile.`,
+	Example: `  git-profile del my-profile -> to delete an entire profile
   git-profile del my-profile user.name -> to delete only user.name`,
-	Run: delRun,
+	Args: cobra.RangeArgs(1, 2),
+	Run:  delRun,
 }
 
 func init() {
@@ -24,20 +23,20 @@ func init() {
 }
 
 func delRun(cmd *cobra.Command, args []string) {
-	if len(args) < 1 {
-		cmd.Usage()
-		os.Exit(1)
-	}
-
 	profile := args[0]
 
 	if len(args) == 2 {
-		cmd.Print("Delete an entry from profile:\n\n")
-		сfgStorage.RemoveValue(profile, args[1])
-	} else {
-		cmd.Print("Delete an entire profile:\n\n")
-		сfgStorage.RemoveProfile(profile)
+		key := args[1]
+		if ok := сfgStorage.RemoveValue(profile, key); !ok {
+			cmd.Printf("There is no profile with `%s` name", profile)
+			os.Exit(0)
+		}
+		сfgStorage.Save(cfgFile)
+		cmd.Printf("Successfully removed `%s` from `%s` profile.", key, profile)
+		os.Exit(0)
 	}
 
+	сfgStorage.RemoveProfile(profile)
 	сfgStorage.Save(cfgFile)
+	cmd.Printf("Successfully removed `%s` profile.", profile)
 }

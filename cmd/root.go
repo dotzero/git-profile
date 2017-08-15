@@ -11,8 +11,16 @@ import (
 )
 
 var (
-	cfgFile    string
+	// Version is the version number or commit hash
+	// These variables should be set by the linker when compiling
+	Version = "0.0.0-unknown"
+	// CommitHash is the git hash of last commit
+	CommitHash = "Unknown"
+	// CompileDate is the date of build
+	CompileDate = "Unknown"
+
 	сfgStorage *config.Config
+	cfgFile    string
 	isDebug    bool
 
 	rootCmd = &cobra.Command{
