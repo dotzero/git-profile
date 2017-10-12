@@ -27,16 +27,16 @@ func delRun(cmd *cobra.Command, args []string) {
 
 	if len(args) == 2 {
 		key := args[1]
-		if ok := сfgStorage.RemoveValue(profile, key); !ok {
+		if ok := cfgStorage.RemoveValue(profile, key); !ok {
 			cmd.Printf("There is no profile with `%s` name", profile)
 			os.Exit(0)
 		}
-		сfgStorage.Save(cfgFile)
+		cfgStorage.Save(cfgFile)
 		cmd.Printf("Successfully removed `%s` from `%s` profile.", key, profile)
 		os.Exit(0)
 	}
 
-	сfgStorage.RemoveProfile(profile)
-	сfgStorage.Save(cfgFile)
+	cfgStorage.RemoveProfile(profile)
+	cfgStorage.Save(cfgFile)
 	cmd.Printf("Successfully removed `%s` profile.", profile)
 }

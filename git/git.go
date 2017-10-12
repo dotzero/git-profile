@@ -2,15 +2,21 @@ package git
 
 import (
 	"log"
-	"os"
 	"os/exec"
 )
 
-// IsRepository check that current directory is a root of git repository
+// IsRepository check that current directory is a git repository
 func IsRepository() bool {
 	log.Println("[DEBUG] IsRepository")
-	s, err := os.Stat(".git")
-	return err == nil && s.IsDir()
+	res, err := exec.Command("git", "rev-parse", "--git-dir").Output()
+
+	if (err != nil) {
+		return false
+	}
+
+	log.Printf("[DEBUG] IsRepository Root .git is: %s", res)
+
+	return true
 }
 
 // SetLocalConfig set git local config key with value

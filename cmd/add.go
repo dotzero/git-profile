@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/dotzero/git-profile/config"
+	"../config"
 	"github.com/spf13/cobra"
 )
 
@@ -29,8 +29,8 @@ func addRun(cmd *cobra.Command, args []string) {
 	key := args[1]
 	value := args[2]
 
-	сfgStorage.SetValue(profile, config.Entry{Key: key, Value: value})
-	err := сfgStorage.Save(cfgFile)
+	cfgStorage.SetValue(profile, config.Entry{Key: key, Value: value})
+	err := cfgStorage.Save(cfgFile)
 	if err != nil {
 		log.Println("[ERROR] Cannot save json to", cfgFile, err)
 		os.Exit(1)
