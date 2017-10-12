@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./cmd"
+	"git-profile/cmd"
 )
 
 func main() {

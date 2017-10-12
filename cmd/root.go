@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"../config"
+	"git-profile/config"
 	"github.com/hashicorp/logutils"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
