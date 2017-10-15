@@ -1,7 +1,7 @@
 package main
 
 import (
-	"git-profile/cmd"
+	"github.com/dotzero/git-profile/cmd"
 )
 
 func main() {
