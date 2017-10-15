@@ -8,13 +8,11 @@ import (
 // IsRepository check that current directory is a git repository
 func IsRepository() bool {
 	log.Println("[DEBUG] IsRepository")
-	res, err := exec.Command("git", "rev-parse", "--git-dir").Output()
+	err := exec.Command("git", "rev-parse", "--git-dir").Run()
 
 	if (err != nil) {
 		return false
 	}
-
-	log.Printf("[DEBUG] IsRepository Root .git is: %s", res)
 
 	return true
 }

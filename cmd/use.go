@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"git-profile/git"
+	"github.com/dotzero/git-profile/git"
 	"github.com/spf13/cobra"
 )
 
