@@ -19,7 +19,7 @@ var (
 	// CompileDate is the date of build
 	CompileDate = "Unknown"
 
-	сfgStorage *config.Config
+	cfgStorage *config.Config
 	cfgFile    string
 	isDebug    bool
 
@@ -58,9 +58,9 @@ func initLogs() {
 
 func initConfig() {
 	cfgFile, _ = homedir.Expand(cfgFile)
-	сfgStorage = config.NewConfig()
+	cfgStorage = config.NewConfig()
 
-	err := сfgStorage.Load(cfgFile)
+	err := cfgStorage.Load(cfgFile)
 	if err != nil {
 		log.Println("[ERROR] Cannot load json from", cfgFile, err)
 		os.Exit(1)

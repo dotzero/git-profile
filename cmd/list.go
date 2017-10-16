@@ -19,7 +19,7 @@ func init() {
 }
 
 func listRun(cmd *cobra.Command, args []string) {
-	if len(сfgStorage.Profiles) == 0 {
+	if len(cfgStorage.Profiles) == 0 {
 		cmd.Print(`There are no available profiles.
 To add a profile, use the following examples:
   git-profile add my-profile user.name "John Doe"
@@ -28,9 +28,9 @@ To add a profile, use the following examples:
 	}
 
 	cmd.Print("Available profiles:\n\n")
-	for title := range сfgStorage.Profiles {
+	for title := range cfgStorage.Profiles {
 		cmd.Printf("[%s]\n", title)
-		entries, _ := сfgStorage.GetProfile(title)
+		entries, _ := cfgStorage.GetProfile(title)
 		for _, entry := range entries {
 			cmd.Printf("\t%s = %s\n", entry.Key, entry.Value)
 		}
