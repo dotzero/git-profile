@@ -24,9 +24,8 @@ func SetLocalConfig(key string, value string) error {
 	return nil
 }
 
-// GetLocalConfig set git local config key with value
+// GetLocalConfig get git local config value by key
 func GetLocalConfig(key string) ([]byte, error) {
 	log.Printf("[DEBUG] git config --local %s \n", key)
-	res, err := exec.Command("git", "config", "--local", key).Output();
-	return res, err
+	return exec.Command("git", "config", "--local", key).Output()
 }
