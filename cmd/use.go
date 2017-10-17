@@ -30,6 +30,7 @@ func useRun(cmd *cobra.Command, args []string) {
 	profile := args[0]
 
 	entries, ok := cfgStorage.GetProfile(profile)
+
 	if !ok {
 		cmd.Printf("There is no profile with `%s` name", profile)
 		os.Exit(0)
@@ -38,6 +39,8 @@ func useRun(cmd *cobra.Command, args []string) {
 	for _, entry := range entries {
 		git.SetLocalConfig(entry.Key, entry.Value)
 	}
+
+	git.SetLocalConfig(`current-profile.name`, profile)
 
 	cmd.Printf("Successfully applied `%s` profile to current git repository.", profile)
 }
