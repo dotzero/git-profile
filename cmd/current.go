@@ -21,7 +21,7 @@ func init() {
 
 func currentRun(cmd *cobra.Command, args []string) {
 	if len(cfgStorage.Profiles) == 0 {
-		cmd.Print(`profiles not setted`)
+		cmd.Print(`no profiles found`)
 		os.Exit(0)
 	}
 
