@@ -9,11 +9,9 @@ import (
 func IsRepository() bool {
 	log.Println("[DEBUG] IsRepository")
 	err := exec.Command("git", "rev-parse", "--git-dir").Run()
-
-	if (err != nil) {
+	if err != nil {
 		return false
 	}
-
 	return true
 }
 

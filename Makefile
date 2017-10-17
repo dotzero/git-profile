@@ -7,9 +7,9 @@ HASH := $(shell git rev-parse --short HEAD)
 DATE := $(shell date +%FT%T%z)
 
 LDFLAGS := "-s -w \
-	-X $(PKG)/cmd.Version=$(VERSION) \
-	-X $(PKG)/cmd.CommitHash=$(HASH) \
-	-X $(PKG)/cmd.CompileDate=$(DATE)"
+	-X main.Version=$(VERSION) \
+	-X main.CommitHash=$(HASH) \
+	-X main.CompileDate=$(DATE)"
 
 all: build
 
