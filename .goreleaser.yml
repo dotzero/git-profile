@@ -2,7 +2,7 @@
 # Build customization
 builds:
   - main: main.go
-    binary: auto-release
+    binary: git-profile
     ldflags: -s -w -X main.Version={{.Version}} -X main.CommitHash={{.Commit}} -X main.CompileDate={{.Date}}
     env:
       - CGO_ENABLED=0
