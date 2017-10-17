@@ -8,11 +8,15 @@ Git Profile allows to add and switch between multiple user profiles in your git 
 
 ## Installation
 
-To install git-profile, you can download a [prebuilt binary](https://github.com/dotzero/git-profile/releases), or you can build it from source.
+If you are OSX user, you can use [Homebrew](http://brew.sh/):
+
+```bash
+brew install dotzero/tap/git-profile
+```
 
 ### Prebuilt binaries
 
-Download the binary from the [releases](https://github.com/dotzero/git-profile/releases) page.
+Download the binary from the [releases](https://github.com/dotzero/git-profile/releases) page and place it in `$PATH` directory.
 
 ### Building from source
 
