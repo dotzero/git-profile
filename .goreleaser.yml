@@ -38,4 +38,4 @@ brew:
   homepage: https://github.com/dotzero/git-profile
   description: Allows to add and switch between multiple user profiles in your git repositories
   test: |
-    system "#{bin}/git-profile -v"
+    system "#{bin}/git-profile version"
