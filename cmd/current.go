@@ -23,15 +23,7 @@ func init() {
 }
 
 func currentRun(cmd *cobra.Command, args []string) {
-	if len(cfgStorage.Profiles) == 0 {
-		cmd.Print(`There are no available profiles.
-To add a profile, use the following examples:
-  git-profile add my-profile user.name "John Doe"
-  git-profile add my-profile user.email work@example.com`)
-		os.Exit(0)
-	}
-
-	if !git.IsRepository() {
+	if len(cfgStorage.Profiles) == 0 || !git.IsRepository() {
 		os.Exit(1)
 	}
 
