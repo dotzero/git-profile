@@ -1,31 +1,26 @@
 package git
 
 import (
-	"log"
 	"os/exec"
+	"strings"
 )
 
-// IsRepository check that current directory is a git repository
+// IsRepository checks that current directory is a git repository
 func IsRepository() bool {
-	log.Println("[DEBUG] IsRepository")
 	err := exec.Command("git", "rev-parse", "--git-dir").Run()
-	if err != nil {
+	if err != nil { //nolint
 		return false
 	}
 	return true
 }
 
-// SetLocalConfig set git local config key with value
-func SetLocalConfig(key string, value string) error {
-	log.Printf("[DEBUG] git config --local %s \"%s\"\n", key, value)
-	if err := exec.Command("git", "config", "--local", key, value).Run(); err != nil {
-		return err
-	}
-	return nil
+// Lead returns the value stored in git local config
+func Lead(key string) (string, error) {
+	out, err := exec.Command("git", "config", "--local", key).Output()
+	return strings.TrimSpace(string(out)), err
 }
 
-// GetLocalConfig get git local config value by key
-func GetLocalConfig(key string) ([]byte, error) {
-	log.Printf("[DEBUG] git config --local %s \n", key)
-	return exec.Command("git", "config", "--local", key).Output()
+// Store sets the value for a key in git local config
+func Store(key string, value string) error {
+	return exec.Command("git", "config", "--local", key, value).Run()
 }

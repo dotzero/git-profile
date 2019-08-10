@@ -6,157 +6,93 @@ import (
 	"github.com/matryer/is"
 )
 
-func TestNewConfig(t *testing.T) {
+func TestDelete(t *testing.T) {
 	is := is.New(t)
 
-	var expected Config
-	expected.Profiles = make(map[string][]Entry)
+	c := New()
+	c.Store("foo", "key1", "value1")
+	c.Store("foo", "key2", "value2")
+	c.Delete("foo", "key1")
 
-	is.Equal(&expected, NewConfig())
-}
+	expected := &Config{
+		Profiles: map[string][]Entry{
+			"foo": {
+				{"key2", "value2"},
+			},
+		},
+	}
 
-func TestGetProfile(t *testing.T) {
-	is := is.New(t)
-
-	var c Config
-	c.Profiles = make(map[string][]Entry)
-	c.Profiles["foo"] = []Entry{}
-
-	_, ok := c.GetProfile("foo")
-	is.True(ok)
-
-	_, ok = c.GetProfile("bar")
-	is.True(!ok)
-
-	delete(c.Profiles, "foo")
-	_, ok = c.GetProfile("foo")
-	is.True(!ok)
-}
-
-func TestRemoveProfile(t *testing.T) {
-	is := is.New(t)
-
-	var c Config
-	c.Profiles = make(map[string][]Entry)
-	c.Profiles["foo"] = []Entry{}
-
-	ok := c.RemoveProfile("foo")
-	is.True(ok)
-
-	ok = c.RemoveProfile("bar")
-	is.True(ok)
+	is.Equal(c, expected)
 }
 
 func TestSetValue(t *testing.T) {
 	is := is.New(t)
 
-	data := []struct {
-		Profile  string
-		Key      string
-		Value    string
-		Expected *Config
+	cases := []struct {
+		profile  string
+		key      string
+		value    string
+		expected *Config
 	}{
 		{
-			Profile: "foo",
-			Key:     "key1",
-			Value:   "value1",
-			Expected: &Config{
+			profile: "foo",
+			key:     "key1",
+			value:   "value1",
+			expected: &Config{
 				Profiles: map[string][]Entry{
-					"foo": []Entry{
-						{
-							Key:   "key1",
-							Value: "value1",
-						},
+					"foo": {
+						{"key1", "value1"},
 					},
 				},
 			},
 		},
 		{
-			Profile: "foo",
-			Key:     "key1",
-			Value:   "value2",
-			Expected: &Config{
+			profile: "foo",
+			key:     "key1",
+			value:   "value2",
+			expected: &Config{
 				Profiles: map[string][]Entry{
-					"foo": []Entry{
-						{
-							Key:   "key1",
-							Value: "value2",
-						},
+					"foo": {
+						{"key1", "value2"},
 					},
 				},
 			},
 		},
 		{
-			Profile: "foo",
-			Key:     "key2",
-			Value:   "value2",
-			Expected: &Config{
+			profile: "foo",
+			key:     "key2",
+			value:   "value2",
+			expected: &Config{
 				Profiles: map[string][]Entry{
-					"foo": []Entry{
-						{
-							Key:   "key1",
-							Value: "value2",
-						},
-						{
-							Key:   "key2",
-							Value: "value2",
-						},
+					"foo": {
+						{"key1", "value2"},
+						{"key2", "value2"},
 					},
 				},
 			},
 		},
 		{
-			Profile: "bar",
-			Key:     "key1",
-			Value:   "value1",
-			Expected: &Config{
+			profile: "bar",
+			key:     "key1",
+			value:   "value1",
+			expected: &Config{
 				Profiles: map[string][]Entry{
-					"foo": []Entry{
-						{
-							Key:   "key1",
-							Value: "value2",
-						},
-						{
-							Key:   "key2",
-							Value: "value2",
-						},
+					"foo": {
+						{"key1", "value2"},
+						{"key2", "value2"},
 					},
-					"bar": []Entry{
-						{
-							Key:   "key1",
-							Value: "value1",
-						},
+					"bar": {
+						{"key1", "value1"},
 					},
 				},
 			},
 		},
 	}
 
-	c := NewConfig()
-	for _, tc := range data {
-		c.SetValue(tc.Profile, Entry{Key: tc.Key, Value: tc.Value})
-		is.Equal(tc.Expected, c)
+	c := New()
+	for _, tc := range cases {
+		var tc = tc // pin
+		c.Store(tc.profile, tc.key, tc.value)
+		is.Equal(c, tc.expected)
 	}
-}
-
-func TestRemoveValue(t *testing.T) {
-	is := is.New(t)
-
-	c := NewConfig()
-	c.SetValue("foo", Entry{Key: "key1", Value: "value1"})
-	c.SetValue("foo", Entry{Key: "key2", Value: "value2"})
-	c.RemoveValue("foo", "key1")
-
-	expected := &Config{
-		Profiles: map[string][]Entry{
-			"foo": []Entry{
-				{
-					Key:   "key2",
-					Value: "value2",
-				},
-			},
-		},
-	}
-
-	is.Equal(expected, c)
 }
