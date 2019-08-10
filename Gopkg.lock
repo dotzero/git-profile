@@ -18,6 +18,14 @@
   version = "v1.0"
 
 [[projects]]
+  digest = "1:044c8b8d1c1d5ab5145c7efeec3c1c200f8dddb49f590c87911231ae50ed6d8c"
+  name = "github.com/matryer/is"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "7c2b2736b653cb467f577a637187a236e770455f"
+  version = "v1.2.0"
+
+[[projects]]
   digest = "1:5d231480e1c64a726869bc4142d270184c419749d34f167646baa21008eb0a79"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
@@ -46,6 +54,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/hashicorp/logutils",
+    "github.com/matryer/is",
     "github.com/mitchellh/go-homedir",
     "github.com/spf13/cobra",
   ]
