@@ -3,10 +3,6 @@ language: go
 go:
   - "1.11.10"
   - "1.12.5"
-  - tip
-
-install:
-  - go get -t ./...
 
 script:
   - make build

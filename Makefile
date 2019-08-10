@@ -14,18 +14,18 @@ LDFLAGS := "-s -w \
 all: build
 
 build:
-	go build -ldflags=$(LDFLAGS) -o $(GOBIN)/$(BIN)
+	GO111MODULE=on go build -ldflags=$(LDFLAGS) -o $(GOBIN)/$(BIN)
 
 install:
-	go install -ldflags=$(LDFLAGS)
+	GO111MODULE=on go install -ldflags=$(LDFLAGS)
 
 test:
-	go test -v ./...
+	GO111MODULE=on go test -v ./...
 
 clean:
 	if [ -f $(GOBIN)/$(BIN) ] ; then rm -f $(GOBIN)/$(BIN) ; fi
 
 lint:
-	golangci-lint run
+	GO111MODULE=on golangci-lint run
 
 .PHONY: build install test clean lint
