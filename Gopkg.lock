@@ -2,38 +2,52 @@
 
 
 [[projects]]
-  branch = "master"
+  digest = "1:16ae35b3a854c667baaf55ff5d455c486f7c2baf040a2727f2ef0e4b096b2a95"
   name = "github.com/hashicorp/logutils"
   packages = ["."]
-  revision = "0dc08b1671f34c4250ce212759ebd880f743d883"
+  pruneopts = "UT"
+  revision = "a335183dfd075f638afcc820c90591ca3c97eba6"
+  version = "v1.0.0"
 
 [[projects]]
+  digest = "1:870d441fe217b8e689d7949fef6e43efbc787e50f200cb1e70dbca9204a1d6be"
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
+  pruneopts = "UT"
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
   version = "v1.0"
 
 [[projects]]
-  branch = "master"
+  digest = "1:5d231480e1c64a726869bc4142d270184c419749d34f167646baa21008eb0a79"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
-  revision = "3864e76763d94a6df2f9960b16a20a33da9f9a66"
+  pruneopts = "UT"
+  revision = "af06845cf3004701891bf4fdb884bfe4920b3727"
+  version = "v1.1.0"
 
 [[projects]]
+  digest = "1:e096613fb7cf34743d49af87d197663cfccd61876e2219853005a57baedfa562"
   name = "github.com/spf13/cobra"
   packages = ["."]
-  revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
-  version = "v0.0.3"
+  pruneopts = "UT"
+  revision = "f2b07da1e2c38d5f12845a4f607e2e1018cbb1f5"
+  version = "v0.0.5"
 
 [[projects]]
+  digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
-  version = "v1.0.1"
+  pruneopts = "UT"
+  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
+  version = "v1.0.3"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "734698d70dd16205d9058e358c0f989c6d3404b2124f925332f2a7e39c66b41a"
+  input-imports = [
+    "github.com/hashicorp/logutils",
+    "github.com/mitchellh/go-homedir",
+    "github.com/spf13/cobra",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
