@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	currentProfileKey  = "current-profile"
+	currentProfileKey  = "current-profile.name"
 	defaultProfileName = "default"
 )
 

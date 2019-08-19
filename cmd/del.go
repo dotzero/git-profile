@@ -22,7 +22,7 @@ func NewDel(c *Cmd) *cobra.Command {
 				key := args[1]
 				ok := c.storage.Delete(profile, key)
 				if !ok {
-					cmd.PrintErrf("There is no profile with `%s` name", profile)
+					cmd.PrintErrf("There is no profile with `%s` name\n", profile)
 					os.Exit(1)
 				}
 
@@ -32,7 +32,7 @@ func NewDel(c *Cmd) *cobra.Command {
 					os.Exit(1)
 				}
 
-				cmd.Printf("Successfully removed `%s` from `%s` profile.", key, profile)
+				cmd.Printf("Successfully removed `%s` from `%s` profile.\n", key, profile)
 				os.Exit(0)
 			}
 
@@ -40,7 +40,7 @@ func NewDel(c *Cmd) *cobra.Command {
 
 			err := c.storage.Save(c.filename)
 			if err != nil {
-				cmd.PrintErr("Unable to store config file", err)
+				cmd.PrintErr("Unable to store config file\n", err)
 				os.Exit(1)
 			}
 

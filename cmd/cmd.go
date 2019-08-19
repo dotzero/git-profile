@@ -49,7 +49,7 @@ func (c *Cmd) Setup() {
 		c.filename, _ = homedir.Expand(c.filename)
 		err := c.storage.Load(c.filename)
 		if err != nil {
-			c.PrintErr("Unable to store config file", err)
+			c.PrintErr("Unable to store config file\n", err)
 			os.Exit(1)
 		}
 	})

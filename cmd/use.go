@@ -26,20 +26,20 @@ func NewUse(c *Cmd) *cobra.Command {
 			profile := args[0]
 			entries, ok := c.storage.Profiles[profile]
 			if !ok {
-				cmd.PrintErrf("There is no profile with `%s` name", profile)
+				cmd.PrintErrf("There is no profile with `%s` name\n", profile)
 				os.Exit(0)
 			}
 
 			err := git.Store(currentProfileKey, profile)
 			if err != nil {
-				cmd.PrintErr("Unable to interact with git", err)
+				cmd.PrintErr("Unable to interact with git to store current profile\n", err)
 				os.Exit(1)
 			}
 
 			for _, entry := range entries {
 				err := git.Store(entry.Key, entry.Value)
 				if err != nil {
-					cmd.PrintErr("Unable to interact with git", err)
+					cmd.PrintErr("Unable to interact with git to set profile entries\n", err)
 					os.Exit(1)
 				}
 			}
