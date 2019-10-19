@@ -38,7 +38,7 @@ func New() *Cmd {
 		Version:     "0.0.0-unknown",
 		CommitHash:  "Unknown",
 		CompileDate: "Unknown",
-		storage:     &config.Config{},
+		storage:     config.New(),
 	}
 }
 
