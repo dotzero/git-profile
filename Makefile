@@ -2,7 +2,7 @@ GOBIN ?= $(shell go env GOPATH)/bin
 PKG = github.com/dotzero/git-profile
 BIN := git-profile
 
-VERSION := 1.0.0
+VERSION := 1.3.0
 HASH := $(shell git rev-parse --short HEAD)
 DATE := $(shell date +%FT%T%z)
 
@@ -13,22 +13,19 @@ LDFLAGS := "-s -w \
 
 all: build
 
-build: fmt vet
-	go build -ldflags=$(LDFLAGS) -o $(GOBIN)/$(BIN)
+build:
+	GO111MODULE=on go build -ldflags=$(LDFLAGS) -o $(GOBIN)/$(BIN)
 
 install:
-	go install -ldflags=$(LDFLAGS)
+	GO111MODULE=on go install -ldflags=$(LDFLAGS)
 
 test:
-	go test -v $(go list ./... | grep -v /vendor/)
+	GO111MODULE=on go test -v ./...
 
 clean:
 	if [ -f $(GOBIN)/$(BIN) ] ; then rm -f $(GOBIN)/$(BIN) ; fi
 
-fmt:
-	find . -name '*.go' -not -path './.vendor/*' -exec gofmt -w=true {} ';'
+lint:
+	GO111MODULE=on golangci-lint run
 
-vet:
-	go vet ./...
-
-.PHONY: build install test clean fmt vet
+.PHONY: build install test clean lint

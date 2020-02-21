@@ -1,0 +1,14 @@
+linters-settings:
+  goimports:
+    local-prefixes: github.com/dotzero/git-profile
+linters:
+  disable:
+    - gochecknoglobals
+    - lll
+  presets:
+    - bugs
+    - complexity
+    - format
+    - performance
+    - style
+    - unused
