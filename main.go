@@ -28,6 +28,8 @@ func main() {
 		cmd.NewDel(c),
 		cmd.NewList(c),
 		cmd.NewUse(c),
+		cmd.NewExport(c),
+		cmd.NewImport(c),
 		cmd.NewVersion(c),
 	)
 	err := c.Execute()
