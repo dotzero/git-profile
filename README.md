@@ -52,9 +52,9 @@ Apply the profile to current git repository
 git profile use home
 
 # Under the hood it runs following commands:
-# git git config --local user.name dotzero
-# git git config --local user.email "mail@dotzero.ru"
-# git git config --local user.signingkey AAAAAAAA
+# git config --local user.name dotzero
+# git config --local user.email "mail@dotzero.ru"
+# git config --local user.signingkey AAAAAAAA
 ```
 
 ## License
