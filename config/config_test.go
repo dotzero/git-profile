@@ -90,8 +90,10 @@ func TestSetValue(t *testing.T) {
 	}
 
 	c := New()
+
 	for _, tc := range cases {
-		var tc = tc // pin
+		tc := tc // pin
+
 		c.Store(tc.profile, tc.key, tc.value)
 		is.Equal(c, tc.expected)
 	}

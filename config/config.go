@@ -29,6 +29,7 @@ func (c *Config) Delete(profile string, value string) bool {
 	}
 
 	entries := c.Profiles[profile][:0]
+
 	for _, e := range c.Profiles[profile] {
 		if e.Key != value {
 			entries = append(entries, e)
@@ -36,6 +37,7 @@ func (c *Config) Delete(profile string, value string) bool {
 	}
 
 	delete(c.Profiles, profile)
+
 	if len(entries) > 0 {
 		c.Profiles[profile] = entries
 	}
@@ -62,7 +64,7 @@ func (c *Config) Save(filename string) error {
 		return err
 	}
 
-	return ioutil.WriteFile(filename, data, 0644)
+	return ioutil.WriteFile(filename, data, 0644) // nolint
 }
 
 // Load profiles from json file

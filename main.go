@@ -21,6 +21,7 @@ func main() {
 	c.Version = Version
 	c.CommitHash = CommitHash
 	c.CompileDate = CompileDate
+
 	c.Setup()
 	c.AddCommand(
 		cmd.NewAdd(c),
@@ -32,6 +33,7 @@ func main() {
 		cmd.NewImport(c),
 		cmd.NewVersion(c),
 	)
+
 	err := c.Execute()
 	if err != nil {
 		os.Exit(1)

@@ -11,12 +11,14 @@ func IsRepository() bool {
 	if err != nil { //nolint
 		return false
 	}
+
 	return true
 }
 
 // Lead returns the value stored in git local config
 func Lead(key string) (string, error) {
 	out, err := exec.Command("git", "config", "--local", key).Output()
+
 	return strings.TrimSpace(string(out)), err
 }
 
