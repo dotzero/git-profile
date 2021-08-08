@@ -27,7 +27,7 @@ func NewAdd(c *Cmd) *cobra.Command {
 				os.Exit(1)
 			}
 
-			cmd.Printf("Successfully added `%s=%s` to `%s` profile.", key, value, profile)
+			cmd.Printf("Successfully added `%s=%s` to `%s` profile.\n", key, value, profile)
 		},
 	}
 }
