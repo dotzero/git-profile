@@ -22,13 +22,14 @@ brews:
     description: Git Profile allows to add and switch between multiple user profiles in your git repositories
     folder: Formula
     homepage: https://github.com/dotzero/git-profile
-    github:
+    tap:
       owner: dotzero
       name:  homebrew-tap
     install: |
       bin.install "git-profile"
     test: |
       system "#{bin}/git-profile version"
+
 builds:
   - binary: git-profile
     env:
