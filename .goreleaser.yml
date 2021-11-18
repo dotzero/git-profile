@@ -1,54 +1,52 @@
-# .goreleaser.yml
+---
 project_name: git-profile
-env:
-  - GO111MODULE=on
-  - CGO_ENABLED=0
-before:
-  hooks:
-    - go mod download
-# Builds customization
-builds:
-  - id: default
-    main: main.go
-    binary: git-profile
-    ldflags:
-      - -s -w -X main.Version={{.Version}} -X main.CommitHash={{.Commit}} -X main.CompileDate={{.Date}}
-    goos:
-      - linux
-      - darwin
-    goarch:
-      - 386
-      - amd64
-# Archives customization
+
 archives:
-  - id: default
-    builds:
-      - default
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    replacements:
-      386: i386
-      amd64: x86_64
-      darwin: macos
-    format: tar.gz
-    format_overrides:
-      - goos: windows
-        format: zip
+  - id: git-profile
     files:
       - LICENSE*
       - README*
-# Homebrew customization
+    format: tar.gz
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+    replacements:
+      386:    32bit
+      amd64:  64bit
+      darwin: macOS
+      linux:  Linux
+
 brews:
   - name: git-profile
-    github:
-      owner: dotzero
-      name: homebrew-tap
     commit_author:
       name: dotzero
       email: mail@dotzero.ru
+    description: Git Profile allows to add and switch between multiple user profiles in your git repositories
     folder: Formula
     homepage: https://github.com/dotzero/git-profile
-    description: Allows switch between multiple user profiles in git repositories
-    test: |
-      system "#{bin}/git-profile version"
+    github:
+      owner: dotzero
+      name:  homebrew-tap
     install: |
       bin.install "git-profile"
+    test: |
+      system "#{bin}/git-profile version"
+builds:
+  - binary: git-profile
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    goarch:
+      - 386
+      - amd64
+    goos:
+      - darwin
+      - linux
+    ldflags: -s -w -X main.Version={{.Version}} -X main.CommitHash={{.Commit}} -X main.CompileDate={{.Date}}
+    main: .
+
+checksum: { name_template: checksums.txt }
+
+release:
+  github:
+    owner: dotzero
+    name:  git-profile
