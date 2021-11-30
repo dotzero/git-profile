@@ -45,6 +45,9 @@ builds:
     ldflags: -s -w -X main.Version={{.Version}} -X main.CommitHash={{.Commit}} -X main.CompileDate={{.Date}}
     main: .
 
+universal_binaries:
+  - replace: true
+
 checksum: { name_template: checksums.txt }
 
 release:
