@@ -28,4 +28,7 @@ clean:
 lint:
 	golangci-lint run
 
-.PHONY: build install test clean lint
+dist-check:
+	goreleaser --snapshot --skip-publish --rm-dist
+
+.PHONY: build install test clean lint dist-check
