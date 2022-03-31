@@ -54,7 +54,6 @@ func (c *Config) Store(profile string, key string, value string) {
 	}
 
 	c.Profiles[profile] = append(c.Profiles[profile], Entry{key, value})
-
 }
 
 // Save stores profiles to json file
@@ -76,7 +75,7 @@ func (c *Config) Load(filename string) (err error) {
 		}
 	}
 
-	body, err := ioutil.ReadFile(filename)
+	body, err := ioutil.ReadFile(filename) // nolint
 	if err != nil {
 		return err
 	}

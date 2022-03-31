@@ -33,6 +33,9 @@ func New() *Cmd {
 		Long:  "Git Profile allows to add and switch between multiple\nuser profiles in your git repositories.",
 	}
 
+	root.SetOutput(os.Stdout)
+	root.SetErr(os.Stderr)
+
 	return &Cmd{
 		Command:     root,
 		Version:     "0.0.0-unknown",

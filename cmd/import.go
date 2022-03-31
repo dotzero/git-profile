@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"encoding/json"
-	"github.com/dotzero/git-profile/config"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
+
+	"github.com/dotzero/git-profile/config"
 )
 
 // NewImport returns `import` command
@@ -13,23 +15,22 @@ func NewImport(c *Cmd) *cobra.Command {
 		Use:     "import [profile] [json-values]",
 		Aliases: []string{"i"},
 		Short:   "Import profile",
-		Long:    "Import profile as json.",
+		Long:    "Import profile from json.",
 		Args:    cobra.ExactArgs(2),
-		Example: "cat ./my-profile.json | xargs -0 git-profile import my-profile",
+		Example: "cat my-profile.json | xargs -0 git-profile import my-profile",
 		Run: func(cmd *cobra.Command, args []string) {
 			profile := args[0]
-			_, ok := c.storage.Profiles[profile]
-			if ok {
-				cmd.PrintErrf("There is already have profile with `%s` name\n", profile)
+
+			if _, ok := c.storage.Profiles[profile]; ok {
+				cmd.PrintErrf("There is profile with `%s` name already exists\n", profile)
 				os.Exit(1)
 			}
 
 			var data []config.Entry
 
 			err := json.Unmarshal([]byte(args[1]), &data)
-
 			if err != nil {
-				cmd.PrintErrf("Unable decode values\n")
+				cmd.PrintErr("Unable to decode profile values\n", err)
 				os.Exit(1)
 			}
 

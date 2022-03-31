@@ -21,6 +21,7 @@ func NewAdd(c *Cmd) *cobra.Command {
 			value := args[2]
 
 			c.storage.Store(profile, key, value)
+
 			err := c.storage.Save(c.filename)
 			if err != nil {
 				cmd.PrintErr("Unable to store config file\n", err)

@@ -18,7 +18,7 @@ func NewDel(c *Cmd) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			profile := args[0]
 
-			if len(args) == 2 {
+			if len(args) == 2 { // nolint
 				key := args[1]
 				ok := c.storage.Delete(profile, key)
 				if !ok {
