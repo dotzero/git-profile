@@ -19,9 +19,7 @@ type Config struct {
 
 // New initializes and returns a new Config
 func New() *Config {
-	return &Config{
-		Profiles: make(map[string][]Entry),
-	}
+	return &Config{}
 }
 
 // Delete deletes the value for a key in the profile
@@ -50,7 +48,13 @@ func (c *Config) Delete(profile string, value string) bool {
 // Store sets the value for a key in the profile
 func (c *Config) Store(profile string, key string, value string) {
 	c.Delete(profile, key)
+
+	if c.Profiles == nil {
+		c.Profiles = make(map[string][]Entry)
+	}
+
 	c.Profiles[profile] = append(c.Profiles[profile], Entry{key, value})
+
 }
 
 // Save stores profiles to json file

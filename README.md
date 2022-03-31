@@ -57,6 +57,18 @@ git profile use home
 # git config --local user.signingkey AAAAAAAA
 ```
 
+Export profile to file
+
+```bash
+git profile export home > home.json
+```
+
+Import profile from file
+
+```bash
+cat ./my-profile.json | xargs -0 git-profile import my-profile
+```
+
 ## License
 
 http://www.opensource.org/licenses/mit-license.php
