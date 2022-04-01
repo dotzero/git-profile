@@ -15,7 +15,7 @@ func Import(cfg *config.Config, filename *string) *cobra.Command {
 		Use:     "import [profile] [json-values]",
 		Aliases: []string{"i"},
 		Short:   "Import profile",
-		Long:    "Import profile from json.",
+		Long:    "Import profile from JSON format.",
 		Args:    cobra.ExactArgs(2),
 		Example: "cat my-profile.json | xargs -0 git-profile import my-profile",
 		Run: func(cmd *cobra.Command, args []string) {
