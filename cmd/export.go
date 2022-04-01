@@ -5,12 +5,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/dotzero/git-profile/config"
 )
 
 // Export returns `export` command
-func Export(cfg *config.Config) *cobra.Command {
+func Export(cfg storage) *cobra.Command {
 	return &cobra.Command{
 		Use:     "export [profile]",
 		Aliases: []string{"e"},
@@ -21,7 +19,7 @@ func Export(cfg *config.Config) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			profile := args[0]
 
-			entries, ok := cfg.Profiles[profile]
+			entries, ok := cfg.Lookup(profile)
 			if !ok {
 				cmd.PrintErrf("There is no profile with `%s` name\n", profile)
 				os.Exit(0)

@@ -4,12 +4,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/dotzero/git-profile/config"
 )
 
 // Del returns `del` command
-func Del(cfg *config.Config, filename *string) *cobra.Command {
+func Del(cfg storage) *cobra.Command {
 	return &cobra.Command{
 		Use:     "del [profile] [key]",
 		Aliases: []string{"rm"},
@@ -25,6 +23,7 @@ func Del(cfg *config.Config, filename *string) *cobra.Command {
 		Args: cobra.RangeArgs(1, 2),
 		Run: func(cmd *cobra.Command, args []string) {
 			profile := args[0]
+			filename, _ := cmd.Flags().GetString("config")
 
 			if len(args) == 1 { // nolint
 				if ok := cfg.DeleteProfile(profile); !ok {
@@ -32,7 +31,7 @@ func Del(cfg *config.Config, filename *string) *cobra.Command {
 					os.Exit(1)
 				}
 
-				err := cfg.Save(*filename)
+				err := cfg.Save(filename)
 				if err != nil {
 					cmd.PrintErrln("Unable to save config file:", err)
 					os.Exit(1)
@@ -45,7 +44,7 @@ func Del(cfg *config.Config, filename *string) *cobra.Command {
 					os.Exit(1)
 				}
 
-				err := cfg.Save(*filename)
+				err := cfg.Save(filename)
 				if err != nil {
 					cmd.PrintErrln("Unable to save config file:", err)
 					os.Exit(1)

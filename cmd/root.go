@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/dotzero/git-profile/config"
+	"github.com/dotzero/git-profile/git"
 )
 
 // Cmd is an CLI app
@@ -24,7 +25,8 @@ type Cmd struct {
 	CompileDate string
 
 	filename string
-	storage  *config.Config
+	config   *config.Config
+	git      *git.Git
 }
 
 // New returns an app
@@ -43,7 +45,8 @@ func New() *Cmd {
 		Version:     "0.0.0-unknown",
 		CommitHash:  "Unknown",
 		CompileDate: "Unknown",
-		storage:     config.New(),
+		config:      config.New(),
+		git:         &git.Git{},
 	}
 }
 
@@ -66,7 +69,7 @@ func (c *Cmd) init() {
 			os.Exit(1)
 		}
 
-		err = c.storage.Load(filename)
+		err = c.config.Load(filename)
 		if err != nil {
 			c.PrintErrln("Unable to load config:", err)
 			os.Exit(1)
@@ -76,13 +79,13 @@ func (c *Cmd) init() {
 	})
 
 	c.AddCommand(
-		Add(c.storage, &c.filename),
-		Current(c.storage),
-		Del(c.storage, &c.filename),
-		List(c.storage),
-		Export(c.storage),
-		Import(c.storage, &c.filename),
-		Use(c.storage),
+		Add(c.config),
+		Current(c.config, c.git),
+		Del(c.config),
+		List(c.config),
+		Export(c.config),
+		Import(c.config),
+		Use(c.config, c.git),
 		Version(c),
 	)
 

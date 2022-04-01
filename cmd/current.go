@@ -4,9 +4,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/dotzero/git-profile/config"
-	"github.com/dotzero/git-profile/git"
 )
 
 const (
@@ -15,18 +12,18 @@ const (
 )
 
 // Current returns `current` command
-func Current(cfg *config.Config) *cobra.Command {
+func Current(cfg storage, v vcs) *cobra.Command {
 	return &cobra.Command{
 		Use:     "current",
 		Aliases: []string{"c"},
 		Short:   "Show selected profile",
 		Long:    "Show selected profile for current repository.",
 		Run: func(cmd *cobra.Command, args []string) {
-			if len(cfg.Profiles) == 0 || !git.IsRepository() {
+			if cfg.Len() == 0 || !v.IsRepository() {
 				os.Exit(1)
 			}
 
-			res, err := git.Lead(currentProfileKey)
+			res, err := v.Get(currentProfileKey)
 			if len(res) == 0 || err != nil {
 				cmd.Print(defaultProfileName)
 				os.Exit(0)

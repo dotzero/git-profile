@@ -9,23 +9,41 @@ import (
 func TestDelete(t *testing.T) {
 	is := is.New(t)
 
-	c := New()
-	c.Store("foo", "key1", "value1")
-	c.Store("foo", "key2", "value2")
-	c.Delete("foo", "key1")
-
-	expected := &Config{
+	cfg := &Config{
 		Profiles: map[string][]Entry{
-			"foo": {
-				{"key2", "value2"},
+			"home": {
+				{"user.email", "work@example.com"},
+				{"user.name", "John Doe"},
 			},
 		},
 	}
 
-	is.Equal(c, expected)
+	is.True(!cfg.Delete("work", "user.name"))
+	is.Equal(len(cfg.Profiles), 1)
+	is.Equal(len(cfg.Profiles["home"]), 2)
+	is.True(cfg.Delete("home", "user.name"))
+	is.Equal(len(cfg.Profiles), 1)
+	is.Equal(len(cfg.Profiles["home"]), 1)
 }
 
-func TestSetValue(t *testing.T) {
+func TestDeleteProfile(t *testing.T) {
+	is := is.New(t)
+
+	cfg := &Config{
+		Profiles: map[string][]Entry{
+			"home": {
+				{"user.email", "work@example.com"},
+			},
+		},
+	}
+
+	is.True(!cfg.DeleteProfile("work"))
+	is.Equal(len(cfg.Profiles), 1)
+	is.True(cfg.DeleteProfile("home"))
+	is.Equal(len(cfg.Profiles), 0)
+}
+
+func TestStoreValue(t *testing.T) {
 	is := is.New(t)
 
 	cases := []struct {
@@ -89,12 +107,12 @@ func TestSetValue(t *testing.T) {
 		},
 	}
 
-	c := New()
+	cfg := New()
 
-	for _, tc := range cases {
-		tc := tc // pin
+	for _, c := range cases {
+		c := c // pin
 
-		c.Store(tc.profile, tc.key, tc.value)
-		is.Equal(c, tc.expected)
+		cfg.Store(c.profile, c.key, c.value)
+		is.Equal(cfg.Profiles, c.expected.Profiles)
 	}
 }

@@ -19,7 +19,32 @@ type Config struct {
 
 // New initializes and returns a new Config
 func New() *Config {
-	return &Config{}
+	return &Config{
+		Profiles: make(map[string][]Entry),
+	}
+}
+
+// Len returns number of profiles
+func (c *Config) Len() int {
+	return len(c.Profiles)
+}
+
+// Lookup returns the profile with the given name
+func (c *Config) Lookup(name string) ([]Entry, bool) {
+	entries, ok := c.Profiles[name]
+
+	return entries, ok
+}
+
+// Names returns profile names
+func (c *Config) Names() []string {
+	names := make([]string, 0, len(c.Profiles))
+
+	for name := range c.Profiles {
+		names = append(names, name)
+	}
+
+	return names
 }
 
 // Delete deletes the value for a key in the profile
@@ -59,10 +84,6 @@ func (c *Config) DeleteProfile(profile string) bool {
 // Store sets the value for a key in the profile
 func (c *Config) Store(profile string, key string, value string) {
 	c.Delete(profile, key)
-
-	if c.Profiles == nil {
-		c.Profiles = make(map[string][]Entry)
-	}
 
 	c.Profiles[profile] = append(c.Profiles[profile], Entry{key, value})
 }

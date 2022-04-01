@@ -4,12 +4,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/dotzero/git-profile/config"
 )
 
 // Add returns `add` command
-func Add(cfg *config.Config, filename *string) *cobra.Command {
+func Add(cfg storage) *cobra.Command {
 	return &cobra.Command{
 		Use:     "add [profile] [key] [value]",
 		Aliases: []string{"set"},
@@ -25,10 +23,11 @@ func Add(cfg *config.Config, filename *string) *cobra.Command {
 			profile := args[0]
 			key := args[1]
 			value := args[2]
+			filename, _ := cmd.Flags().GetString("config")
 
 			cfg.Store(profile, key, value)
 
-			err := cfg.Save(*filename)
+			err := cfg.Save(filename)
 			if err != nil {
 				cmd.PrintErrln("Unable to save config file:", err)
 				os.Exit(1)
