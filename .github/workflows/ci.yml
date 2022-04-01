@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+    branches:
+    tags:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Run tests
+        run: go test -v ./...
+        env:
+          GOFLAGS: "-mod=vendor"
+
+      - name: Set up golangci-lint
+        run: |
+          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $GITHUB_WORKSPACE v1.43.0
+
+      - name: Run linters
+        run: $GITHUB_WORKSPACE/golangci-lint run
+        env:
+          GOFLAGS: "-mod=vendor"
