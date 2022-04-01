@@ -26,6 +26,9 @@ clean:
 	if [ -f $(GOBIN)/$(BIN) ] ; then rm -f $(GOBIN)/$(BIN) ; fi
 
 dist-check:
-	goreleaser --snapshot --skip-publish --rm-dist
+	goreleaser release --snapshot --rm-dist
 
-.PHONY: all build test lint clean dist-check
+dist-release:
+	goreleaser release --rm-dist
+
+.PHONY: all build test lint clean dist-check dist-release
