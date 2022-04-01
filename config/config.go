@@ -45,6 +45,17 @@ func (c *Config) Delete(profile string, value string) bool {
 	return true
 }
 
+// DeleteProfile deletes the profile
+func (c *Config) DeleteProfile(profile string) bool {
+	if _, ok := c.Profiles[profile]; !ok {
+		return false
+	}
+
+	delete(c.Profiles, profile)
+
+	return true
+}
+
 // Store sets the value for a key in the profile
 func (c *Config) Store(profile string, key string, value string) {
 	c.Delete(profile, key)

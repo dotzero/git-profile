@@ -9,8 +9,8 @@ import (
 	"github.com/dotzero/git-profile/config"
 )
 
-// NewImport returns `import` command
-func NewImport(c *Cmd) *cobra.Command {
+// Import returns `import` command
+func Import(cfg *config.Config, filename *string) *cobra.Command {
 	return &cobra.Command{
 		Use:     "import [profile] [json-values]",
 		Aliases: []string{"i"},
@@ -21,26 +21,21 @@ func NewImport(c *Cmd) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			profile := args[0]
 
-			if _, ok := c.storage.Profiles[profile]; ok {
-				cmd.PrintErrf("There is profile with `%s` name already exists\n", profile)
-				os.Exit(1)
-			}
+			var entries []config.Entry
 
-			var data []config.Entry
-
-			err := json.Unmarshal([]byte(args[1]), &data)
+			err := json.Unmarshal([]byte(args[1]), &entries)
 			if err != nil {
 				cmd.PrintErr("Unable to decode profile values\n", err)
 				os.Exit(1)
 			}
 
-			for _, entry := range data {
-				c.storage.Store(profile, entry.Key, entry.Value)
+			for _, entry := range entries {
+				cfg.Store(profile, entry.Key, entry.Value)
 			}
 
-			err = c.storage.Save(c.filename)
+			err = cfg.Save(*filename)
 			if err != nil {
-				cmd.PrintErr("Unable to store config file\n", err)
+				cmd.PrintErrln("Unable to save config file:", err)
 				os.Exit(1)
 			}
 

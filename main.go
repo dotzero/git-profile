@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/dotzero/git-profile/cmd"
 )
 
@@ -21,21 +19,5 @@ func main() {
 	c.Version = Version
 	c.CommitHash = CommitHash
 	c.CompileDate = CompileDate
-
-	c.Setup()
-	c.AddCommand(
-		cmd.NewAdd(c),
-		cmd.NewCurrent(c),
-		cmd.NewDel(c),
-		cmd.NewList(c),
-		cmd.NewUse(c),
-		cmd.NewExport(c),
-		cmd.NewImport(c),
-		cmd.NewVersion(c),
-	)
-
-	err := c.Execute()
-	if err != nil {
-		os.Exit(1)
-	}
+	c.Execute()
 }
