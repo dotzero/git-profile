@@ -46,7 +46,7 @@ func New() *Cmd {
 		CommitHash:  "Unknown",
 		CompileDate: "Unknown",
 		config:      config.New(),
-		git:         &git.Git{},
+		git:         git.New(),
 	}
 }
 
