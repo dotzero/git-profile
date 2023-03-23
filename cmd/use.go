@@ -43,7 +43,7 @@ func Use(cfg storage, v vcs) *cobra.Command {
 				}
 			}
 
-			cmd.Printf("Successfully applied `%s` profile to current git repository.", profile)
+			cmd.Printf("Successfully applied `%s` profile to current git repository.\n", profile)
 		},
 	}
 }
