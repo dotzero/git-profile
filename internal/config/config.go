@@ -4,23 +4,22 @@ import (
 	"encoding/json"
 	"os"
 	"sort"
+
+	"github.com/dotzero/git-profile/internal/oldconfig"
 )
 
 // Entry is the entry in config file
-type Entry struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
+type Entry map[string]string
 
 // Config is the config storage
 type Config struct {
-	Profiles map[string][]Entry `json:"profiles"`
+	Profiles map[string]Entry `json:"profiles"`
 }
 
 // New initializes and returns a new Config
 func New() *Config {
 	return &Config{
-		Profiles: make(map[string][]Entry),
+		Profiles: make(map[string]Entry),
 	}
 }
 
@@ -30,7 +29,7 @@ func (c *Config) Len() int {
 }
 
 // Lookup returns the profile with the given name
-func (c *Config) Lookup(name string) ([]Entry, bool) {
+func (c *Config) Lookup(name string) (Entry, bool) {
 	entries, ok := c.Profiles[name]
 
 	return entries, ok
@@ -50,23 +49,15 @@ func (c *Config) Names() []string {
 }
 
 // Delete deletes the value for a key in the profile
-func (c *Config) Delete(profile string, value string) bool {
+func (c *Config) Delete(profile string, key string) bool {
 	if _, ok := c.Profiles[profile]; !ok {
 		return false
 	}
 
-	entries := c.Profiles[profile][:0]
+	delete(c.Profiles[profile], key)
 
-	for _, e := range c.Profiles[profile] {
-		if e.Key != value {
-			entries = append(entries, e)
-		}
-	}
-
-	delete(c.Profiles, profile)
-
-	if len(entries) > 0 {
-		c.Profiles[profile] = entries
+	if len(c.Profiles[profile]) == 0 {
+		delete(c.Profiles, profile)
 	}
 
 	return true
@@ -87,7 +78,11 @@ func (c *Config) DeleteProfile(profile string) bool {
 func (c *Config) Store(profile string, key string, value string) {
 	c.Delete(profile, key)
 
-	c.Profiles[profile] = append(c.Profiles[profile], Entry{key, value})
+	if _, ok := c.Profiles[profile]; !ok {
+		c.Profiles[profile] = make(Entry)
+	}
+
+	c.Profiles[profile][key] = value
 }
 
 // Save stores profiles to json file
@@ -114,5 +109,27 @@ func (c *Config) Load(filename string) (err error) {
 		return err
 	}
 
-	return json.Unmarshal(body, c)
+	// Try to unmarshal as new format (map)
+	err = json.Unmarshal(body, c)
+	if err == nil {
+		return nil // Success with new format
+	}
+
+	// Try to unmarshal as old format (array)
+	oldCfg := oldconfig.New()
+	err = json.Unmarshal(body, oldCfg)
+	if err != nil {
+		// Neither format worked, return original error
+		return json.Unmarshal(body, c)
+	}
+
+	// Convert old format to new format
+	for profileName, oldEntries := range oldCfg.Profiles {
+		for _, entry := range oldEntries {
+			c.Store(profileName, entry.Key, entry.Value)
+		}
+	}
+
+	// Auto-save converted format
+	return c.Save(filename)
 }

@@ -18,9 +18,9 @@ func TestUse(t *testing.T) {
 		LenFunc: func() int {
 			return 1
 		},
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: "user.email", Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				"user.email": "work@example.com",
 			}, true
 		},
 	}

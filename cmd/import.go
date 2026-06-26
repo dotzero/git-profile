@@ -23,7 +23,7 @@ func Import(cfg storage) *cobra.Command {
 			profile := args[0]
 			filename, _ := cmd.Flags().GetString("config")
 
-			var entries []config.Entry
+			var entries config.Entry
 
 			err := json.Unmarshal([]byte(args[1]), &entries)
 			if err != nil {
@@ -31,8 +31,8 @@ func Import(cfg storage) *cobra.Command {
 				os.Exit(1)
 			}
 
-			for _, entry := range entries {
-				cfg.Store(profile, entry.Key, entry.Value)
+			for _, key := range []string{userNameKey, userEmailKey, userSigningKeyKey} {
+				cfg.Store(profile, key, entries[key])
 			}
 
 			err = cfg.Save(filename)

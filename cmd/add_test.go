@@ -54,10 +54,10 @@ func TestAddInteractiveStoresOnlyChangedFilledValues(t *testing.T) {
 	is := is.New(t)
 
 	cfg := &storageMock{
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: userNameKey, Value: "Jane Doe"},
-				{Key: userEmailKey, Value: "old@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				userNameKey:  "Jane Doe",
+				userEmailKey: "old@example.com",
 			}, true
 		},
 		SaveFunc: func(filename string) error {
@@ -105,10 +105,10 @@ func TestAddInteractiveSkipsSaveWhenNothingChanged(t *testing.T) {
 	is := is.New(t)
 
 	cfg := &storageMock{
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: userNameKey, Value: "Jane Doe"},
-				{Key: userEmailKey, Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				userNameKey:  "Jane Doe",
+				userEmailKey: "work@example.com",
 			}, true
 		},
 		SaveFunc: func(filename string) error {

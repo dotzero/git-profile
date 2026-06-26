@@ -22,7 +22,7 @@ func TestImport(t *testing.T) {
 	cmd := Import(cfg)
 
 	cmd.SetOut(&b)
-	cmd.SetArgs([]string{"profile", `[{"key":"user.email","value":"work@example.com"}]`})
+	cmd.SetArgs([]string{"profile", `{"user.email": "work@example.com"}`})
 	err := cmd.Execute()
 
 	is.NoErr(err)

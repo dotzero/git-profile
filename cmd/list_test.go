@@ -19,9 +19,9 @@ func TestList(t *testing.T) {
 		NamesFunc: func() []string {
 			return []string{"home"}
 		},
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: "user.email", Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				"user.email": "work@example.com",
 			}, true
 		},
 	}

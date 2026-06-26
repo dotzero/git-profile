@@ -53,14 +53,17 @@ func unuseProfileResolve(args []string, v vcs) (string, error) {
 }
 
 func profileUnapply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
-	entries, ok := cfg.Lookup(profile)
+	_, ok := cfg.Lookup(profile)
 	if !ok {
 		ui.PrintErrln(cmd, ui.ErrorStyle, "There is no profile with `%s` name", profile)
 		os.Exit(0)
 	}
 
-	for _, entry := range entries {
-		err := v.Unset(entry.Key)
+	for _, key := range []string{userNameKey, userEmailKey, userSigningKeyKey} {
+		if val, _ := v.Get(key); val == "" {
+			continue
+		}
+		err := v.Unset(key)
 		if err != nil {
 			ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to interact with git to remove current profile: %s", err)
 			os.Exit(1)

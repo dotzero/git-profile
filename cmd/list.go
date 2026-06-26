@@ -23,8 +23,11 @@ func List(cfg storage, v vcs) *cobra.Command {
 				ui.Println(cmd, ui.SuccessStyle, "- %s:", name)
 
 				profile, _ := cfg.Lookup(name)
-				for _, entry := range profile {
-					ui.Println(cmd, ui.DefaultStyle, "  %s: %s", entry.Key, entry.Value)
+				for _, key := range []string{userNameKey, userEmailKey, userSigningKeyKey} {
+					if profile[key] == "" {
+						continue
+					}
+					ui.Println(cmd, ui.DefaultStyle, "  %s: %s", key, profile[key])
 				}
 			}
 		},

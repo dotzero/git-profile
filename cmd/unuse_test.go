@@ -17,9 +17,9 @@ func TestUnuse(t *testing.T) {
 		LenFunc: func() int {
 			return 1
 		},
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: "user.email", Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				"user.email": "work@example.com",
 			}, true
 		},
 	}
@@ -29,6 +29,12 @@ func TestUnuse(t *testing.T) {
 	vcs := &vcsMock{
 		IsRepositoryFunc: func() bool {
 			return true
+		},
+		GetFunc: func(key string) (string, error) {
+			if key == userEmailKey {
+				return "work@example.com", nil
+			}
+			return "", nil
 		},
 		UnsetFunc: func(key string) error {
 			unset = append(unset, key)

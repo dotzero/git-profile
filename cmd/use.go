@@ -76,8 +76,8 @@ func profileApply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
 		os.Exit(1)
 	}
 
-	for _, entry := range entries {
-		err := v.Set(entry.Key, entry.Value)
+	for _, key := range []string{userNameKey, userEmailKey, userSigningKeyKey} {
+		err := v.Set(key, entries[key])
 		if err != nil {
 			ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to interact with git to store current profile: %s", err)
 			os.Exit(1)

@@ -26,7 +26,7 @@ import (
 //			LoadFunc: func(filename string) error {
 //				panic("mock out the Load method")
 //			},
-//			LookupFunc: func(name string) ([]config.Entry, bool) {
+//			LookupFunc: func(name string) (config.Entry, bool) {
 //				panic("mock out the Lookup method")
 //			},
 //			NamesFunc: func() []string {
@@ -58,7 +58,7 @@ type storageMock struct {
 	LoadFunc func(filename string) error
 
 	// LookupFunc mocks the Lookup method.
-	LookupFunc func(name string) ([]config.Entry, bool)
+	LookupFunc func(name string) (config.Entry, bool)
 
 	// NamesFunc mocks the Names method.
 	NamesFunc func() []string
@@ -252,7 +252,7 @@ func (mock *storageMock) LoadCalls() []struct {
 }
 
 // Lookup calls LookupFunc.
-func (mock *storageMock) Lookup(name string) ([]config.Entry, bool) {
+func (mock *storageMock) Lookup(name string) (config.Entry, bool) {
 	if mock.LookupFunc == nil {
 		panic("storageMock.LookupFunc: method is nil but storage.Lookup was just called")
 	}

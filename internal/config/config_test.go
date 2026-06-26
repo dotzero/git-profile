@@ -10,10 +10,10 @@ func TestDelete(t *testing.T) {
 	is := is.New(t)
 
 	cfg := &Config{
-		Profiles: map[string][]Entry{
+		Profiles: map[string]Entry{
 			"home": {
-				{"user.email", "work@example.com"},
-				{"user.name", "John Doe"},
+				"user.email": "work@example.com",
+				"user.name":  "John Doe",
 			},
 		},
 	}
@@ -30,9 +30,9 @@ func TestDeleteProfile(t *testing.T) {
 	is := is.New(t)
 
 	cfg := &Config{
-		Profiles: map[string][]Entry{
+		Profiles: map[string]Entry{
 			"home": {
-				{"user.email", "work@example.com"},
+				"user.email": "work@example.com",
 			},
 		},
 	}
@@ -57,9 +57,9 @@ func TestStoreValue(t *testing.T) {
 			key:     "key1",
 			value:   "value1",
 			expected: &Config{
-				Profiles: map[string][]Entry{
+				Profiles: map[string]Entry{
 					"foo": {
-						{"key1", "value1"},
+						"key1": "value1",
 					},
 				},
 			},
@@ -69,9 +69,9 @@ func TestStoreValue(t *testing.T) {
 			key:     "key1",
 			value:   "value2",
 			expected: &Config{
-				Profiles: map[string][]Entry{
+				Profiles: map[string]Entry{
 					"foo": {
-						{"key1", "value2"},
+						"key1": "value2",
 					},
 				},
 			},
@@ -81,10 +81,10 @@ func TestStoreValue(t *testing.T) {
 			key:     "key2",
 			value:   "value2",
 			expected: &Config{
-				Profiles: map[string][]Entry{
+				Profiles: map[string]Entry{
 					"foo": {
-						{"key1", "value2"},
-						{"key2", "value2"},
+						"key1": "value2",
+						"key2": "value2",
 					},
 				},
 			},
@@ -94,13 +94,13 @@ func TestStoreValue(t *testing.T) {
 			key:     "key1",
 			value:   "value1",
 			expected: &Config{
-				Profiles: map[string][]Entry{
+				Profiles: map[string]Entry{
 					"foo": {
-						{"key1", "value2"},
-						{"key2", "value2"},
+						"key1": "value2",
+						"key2": "value2",
 					},
 					"bar": {
-						{"key1", "value1"},
+						"key1": "value1",
 					},
 				},
 			},

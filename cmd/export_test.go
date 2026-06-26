@@ -13,9 +13,9 @@ func TestExport(t *testing.T) {
 	is := is.New(t)
 
 	cfg := &storageMock{
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: "user.email", Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				"user.email": "work@example.com",
 			}, true
 		},
 	}
@@ -29,5 +29,5 @@ func TestExport(t *testing.T) {
 	err := cmd.Execute()
 
 	is.NoErr(err)
-	is.Equal(trim(b.String()), `[{"key":"user.email","value":"work@example.com"}]`)
+	is.Equal(trim(b.String()), `{"user.email":"work@example.com"}`)
 }

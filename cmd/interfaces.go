@@ -8,7 +8,7 @@ import (
 
 type storage interface {
 	Len() int
-	Lookup(name string) ([]config.Entry, bool)
+	Lookup(name string) (config.Entry, bool)
 	Names() []string
 	Delete(profile string, value string) bool
 	DeleteProfile(profile string) bool
