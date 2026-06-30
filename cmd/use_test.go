@@ -20,16 +20,19 @@ func TestUse(t *testing.T) {
 		},
 		LookupFunc: func(name string) (config.Entry, bool) {
 			return config.Entry{
-				"user.email": "work@example.com",
+				"user.email":    "work@example.com",
+				"core.autocrlf": "input",
 			}, true
 		},
 	}
 
+	setParams := make(map[string]string)
 	vcs := &vcsMock{
 		IsRepositoryFunc: func() bool {
 			return true
 		},
 		SetFunc: func(key string, value string) error {
+			setParams[key] = value
 			return nil
 		},
 	}
@@ -44,6 +47,11 @@ func TestUse(t *testing.T) {
 
 	is.NoErr(err)
 	is.Equal(trim(b.String()), "Successfully applied `profile` profile to current git repository.")
+	is.Equal(setParams, map[string]string{
+		"current-profile.name": "profile",
+		"user.email":           "work@example.com",
+		"core.autocrlf":        "input",
+	})
 }
 
 func TestProfileResolveInteractive(t *testing.T) {

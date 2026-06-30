@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"sort"
 	"testing"
 
 	"github.com/matryer/is"
@@ -19,7 +20,8 @@ func TestUnuse(t *testing.T) {
 		},
 		LookupFunc: func(name string) (config.Entry, bool) {
 			return config.Entry{
-				"user.email": "work@example.com",
+				"user.email":    "work@example.com",
+				"core.autocrlf": "input",
 			}, true
 		},
 	}
@@ -29,12 +31,6 @@ func TestUnuse(t *testing.T) {
 	vcs := &vcsMock{
 		IsRepositoryFunc: func() bool {
 			return true
-		},
-		GetFunc: func(key string) (string, error) {
-			if key == userEmailKey {
-				return "work@example.com", nil
-			}
-			return "", nil
 		},
 		UnsetFunc: func(key string) error {
 			unset = append(unset, key)
@@ -52,7 +48,12 @@ func TestUnuse(t *testing.T) {
 
 	is.NoErr(err)
 	is.Equal(trim(b.String()), "Successfully removed `profile` profile from current git repository.")
-	is.Equal(unset, []string{"user.email", currentProfileKey})
+	is.Equal(len(unset), 3)
+	is.Equal(unset[2], currentProfileKey)
+
+	keys := unset[:2]
+	sort.Strings(keys)
+	is.Equal(keys, []string{"core.autocrlf", "user.email"})
 }
 
 func TestUnuseProfileResolveArg(t *testing.T) {
