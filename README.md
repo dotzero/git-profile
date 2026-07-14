@@ -41,6 +41,12 @@ Apply a profile in the current Git repository:
 git-profile use
 ```
 
+Apply a profile from outside the repository:
+
+```bash
+git-profile -C /path/to/repo use home
+```
+
 ## Usage
 
 ### `add`
@@ -237,4 +243,4 @@ git-profile completion fish > ~/.config/fish/completions/git-profile.fish
 
 ## License
 
-[MIT](http://www.opensource.org/licenses/mit-license.php)
+[MIT](https://opensource.org/license/mit)

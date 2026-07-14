@@ -70,6 +70,18 @@ func TestIsRepository(t *testing.T) {
 	is.True(ok)
 }
 
+func TestSetDir(t *testing.T) {
+	is := is.New(t)
+
+	dir := t.TempDir()
+	g := &Git{exec: mockExecCommand}
+	g.SetDir(dir)
+
+	cmd := g.command("rev-parse", "--git-dir")
+
+	is.Equal(cmd.Dir, dir)
+}
+
 func TestGet(t *testing.T) {
 	is := is.New(t)
 

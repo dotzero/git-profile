@@ -24,9 +24,10 @@ type Cmd struct {
 	// CompileDate is the date of build
 	CompileDate string
 
-	filename string
-	config   *config.Config
-	git      *git.Git
+	filename  string
+	directory string
+	config    *config.Config
+	git       *git.Git
 }
 
 // New returns an app
@@ -76,6 +77,7 @@ func (c *Cmd) init() {
 		}
 
 		c.filename = filename
+		c.git.SetDir(c.directory)
 	})
 
 	c.AddCommand(
@@ -94,7 +96,12 @@ func (c *Cmd) init() {
 	c.SetOutput(os.Stdout)
 	c.SetErr(os.Stderr)
 
+	c.registerFlags()
+}
+
+func (c *Cmd) registerFlags() {
 	c.PersistentFlags().StringVarP(&c.filename, "config", "c", "~/.gitprofile", "config file")
+	c.PersistentFlags().StringVarP(&c.directory, "directory", "C", "", "run git commands in the given path")
 }
 
 func multiline(lines ...string) string {
