@@ -2,7 +2,7 @@ GOBIN ?= $(shell go env GOPATH)/bin
 PKG = github.com/dotzero/git-profile
 BIN := git-profile
 
-VERSION := 1.8.0
+VERSION := 1.8.1
 HASH := $(shell git rev-parse --short HEAD)
 DATE := $(shell date +%FT%T%z)
 
