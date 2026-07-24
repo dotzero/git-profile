@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Profile"
+  short_description: "Manage Git identities per repository"
+  default_prompt: "Use $git-profile to manage Git identities for my repositories."
