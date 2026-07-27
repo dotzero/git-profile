@@ -18,11 +18,13 @@ func TestImport(t *testing.T) {
 			},
 			StoreFunc: func(profile string, key string, value string) {
 				is.Equal(profile, "profile")
+
 				stored[key] = value
 			},
 		}
 
 		var b bytes.Buffer
+
 		cmd := Import(cfg)
 		cmd.SetOut(&b)
 		cmd.SetArgs([]string{"profile", `{"user.email": "work@example.com", "core.autocrlf": "input"}`})
@@ -46,11 +48,13 @@ func TestImport(t *testing.T) {
 			},
 			StoreFunc: func(profile string, key string, value string) {
 				is.Equal(profile, "profile")
+
 				stored[key] = value
 			},
 		}
 
 		var b bytes.Buffer
+
 		cmd := Import(cfg)
 		cmd.SetOut(&b)
 		cmd.SetArgs([]string{"profile", `[{"key": "user.email", "value": "work@example.com"}, {"key": "core.autocrlf", "value": "input"}]`})

@@ -117,6 +117,7 @@ func (c *Config) Load(filename string) (err error) {
 
 	// Try to unmarshal as old format (array)
 	oldCfg := oldconfig.New()
+
 	err = json.Unmarshal(body, oldCfg)
 	if err != nil {
 		// Neither format worked, return original error

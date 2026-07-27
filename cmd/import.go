@@ -30,11 +30,13 @@ func Import(cfg storage) *cobra.Command {
 			if err != nil {
 				// Try to unmarshal as old format (array)
 				var oldEntries []oldconfig.OldEntry
+
 				errOld := json.Unmarshal([]byte(args[1]), &oldEntries)
 				if errOld != nil {
 					ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to decode profile values: %s", err)
 					os.Exit(1)
 				}
+
 				entries = make(config.Entry)
 				for _, entry := range oldEntries {
 					entries[entry.Key] = entry.Value

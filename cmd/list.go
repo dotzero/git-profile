@@ -25,11 +25,14 @@ func List(cfg storage, v vcs) *cobra.Command {
 				ui.Println(cmd, ui.SuccessStyle, "- %s:", name)
 
 				profile, _ := cfg.Lookup(name)
+
 				keys := make([]string, 0, len(profile))
 				for key := range profile {
 					keys = append(keys, key)
 				}
+
 				sort.Strings(keys)
+
 				for _, key := range keys {
 					ui.Println(cmd, ui.DefaultStyle, "  %s: %s", key, profile[key])
 				}

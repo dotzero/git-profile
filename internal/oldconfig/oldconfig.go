@@ -5,18 +5,18 @@ import (
 	"os"
 )
 
-// Entry is the entry in config file
+// OldEntry is a single key/value pair in the legacy config file format.
 type OldEntry struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-// Config is the config storage
+// OldConfig is the legacy config storage used for migration.
 type OldConfig struct {
 	Profiles map[string][]OldEntry `json:"profiles"`
 }
 
-// New initializes and returns a new Config
+// New initializes and returns a new OldConfig.
 func New() *OldConfig {
 	return &OldConfig{
 		Profiles: make(map[string][]OldEntry),
