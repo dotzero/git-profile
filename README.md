@@ -180,13 +180,15 @@ git-profile import work "$(cat work.json)"
 
 ## Config file
 
-By default, Git Profile stores profiles in:
+By default, Git Profile looks for profiles in this order:
 
-```bash
-~/.gitprofile
-```
+1. `$XDG_CONFIG_HOME/git-profile/config.json` (or `~/.config/git-profile/config.json`)
+2. `~/.gitprofile` (legacy path and array-based format)
 
-You can override it with:
+New installs create the XDG config file in the map-based format.
+Existing `~/.gitprofile` files stay in the legacy array-based format and are not rewritten in place.
+
+You can override the path with:
 
 ```bash
 git-profile --config /path/to/file add work user.email work@example.com

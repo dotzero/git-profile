@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 
 	"github.com/dotzero/git-profile/internal/config"
@@ -63,7 +62,7 @@ func (c *Cmd) Execute() {
 
 func (c *Cmd) init() {
 	cobra.OnInitialize(func() {
-		filename, err := homedir.Expand(c.filename)
+		filename, err := resolveConfigPath(c.filename)
 		if err != nil {
 			c.PrintErrln(err)
 			os.Exit(1)
@@ -94,7 +93,21 @@ func (c *Cmd) init() {
 	c.SetOutput(os.Stdout)
 	c.SetErr(os.Stderr)
 
-	c.PersistentFlags().StringVarP(&c.filename, "config", "c", "~/.gitprofile", "config file")
+	c.PersistentFlags().StringVarP(
+		&c.filename,
+		"config",
+		"c",
+		"",
+		"config file (default: $XDG_CONFIG_HOME/git-profile/config.json or ~/.gitprofile)",
+	)
+}
+
+func resolveConfigPath(filename string) (string, error) {
+	if filename == "" {
+		return config.DefaultPath()
+	}
+
+	return config.ExpandPath(filename)
 }
 
 func multiline(lines ...string) string {

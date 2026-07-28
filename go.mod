@@ -7,7 +7,6 @@ require (
 	charm.land/lipgloss/v2 v2.0.1
 	github.com/charmbracelet/x/ansi v0.11.6
 	github.com/matryer/is v1.4.1
-	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v1.4.0
 )
 

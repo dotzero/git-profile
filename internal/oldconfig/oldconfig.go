@@ -11,7 +11,7 @@ type OldEntry struct {
 	Value string `json:"value"`
 }
 
-// OldConfig is the legacy config storage used for migration.
+// OldConfig is the legacy array-based config storage for ~/.gitprofile.
 type OldConfig struct {
 	Profiles map[string][]OldEntry `json:"profiles"`
 }
