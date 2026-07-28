@@ -188,6 +188,15 @@ By default, Git Profile looks for profiles in this order:
 New installs create the XDG config file in the map-based format.
 Existing `~/.gitprofile` files stay in the legacy array-based format and are not rewritten in place.
 
+To copy a legacy config to the XDG path in map format:
+
+```bash
+git-profile migrate
+```
+
+The legacy file is kept. After migration, the XDG file takes priority.
+Use `--force` to overwrite an existing XDG config file.
+
 You can override the path with:
 
 ```bash

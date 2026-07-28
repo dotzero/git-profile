@@ -61,7 +61,11 @@ func (c *Cmd) Execute() {
 }
 
 func (c *Cmd) init() {
-	cobra.OnInitialize(func() {
+	c.PersistentPreRun = func(cmd *cobra.Command, _ []string) {
+		if cmd.Name() == "migrate" {
+			return
+		}
+
 		filename, err := resolveConfigPath(c.filename)
 		if err != nil {
 			c.PrintErrln(err)
@@ -75,7 +79,7 @@ func (c *Cmd) init() {
 		}
 
 		c.filename = filename
-	})
+	}
 
 	c.AddCommand(
 		Add(c.config),
@@ -85,6 +89,7 @@ func (c *Cmd) init() {
 		List(c.config, c.git),
 		Export(c.config),
 		Import(c.config),
+		Migrate(),
 		Use(c.config, c.git),
 		Unuse(c.config, c.git),
 		Version(c),

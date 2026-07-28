@@ -62,6 +62,56 @@ func DefaultPath() (string, error) {
 	return xdgPath, nil
 }
 
+// XDGPath returns $XDG_CONFIG_HOME/git-profile/config.json.
+func XDGPath() (string, error) {
+	return xdgConfigPath()
+}
+
+// LegacyPath returns ~/.gitprofile.
+func LegacyPath() (string, error) {
+	return legacyConfigPath()
+}
+
+// Migrate copies ~/.gitprofile to the XDG path in map format.
+// It does not remove the legacy file. If the XDG file already exists,
+// set force to overwrite it.
+func Migrate(force bool) (src string, dst string, err error) {
+	src, err = legacyConfigPath()
+	if err != nil {
+		return "", "", err
+	}
+
+	dst, err = xdgConfigPath()
+	if err != nil {
+		return "", "", err
+	}
+
+	if !fileExists(src) {
+		return "", "", fmt.Errorf("legacy config not found: %s", src)
+	}
+
+	if fileExists(dst) && !force {
+		return "", "", fmt.Errorf("XDG config already exists: %s (use --force to overwrite)", dst)
+	}
+
+	cfg := New()
+
+	err = cfg.Load(src)
+	if err != nil {
+		return "", "", err
+	}
+
+	// Always write the map format to the XDG path.
+	cfg.legacy = false
+
+	err = cfg.Save(dst)
+	if err != nil {
+		return "", "", err
+	}
+
+	return src, dst, nil
+}
+
 // ExpandPath expands a leading ~/ to the user home directory.
 func ExpandPath(path string) (string, error) {
 	if path == "" {

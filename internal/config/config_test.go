@@ -330,3 +330,99 @@ func TestExpandPath(t *testing.T) {
 	is.NoErr(err)
 	is.Equal(path, home)
 }
+
+func TestMigrate(t *testing.T) {
+	is := is.New(t)
+
+	home := t.TempDir()
+	xdgHome := filepath.Join(home, "xdg")
+	t.Setenv("HOME", home)
+	t.Setenv("XDG_CONFIG_HOME", xdgHome)
+
+	legacyPath := filepath.Join(home, ".gitprofile")
+	xdgPath := filepath.Join(xdgHome, "git-profile", "config.json")
+	legacy := `{
+  "profiles": {
+    "work": [
+      {
+        "key": "user.email",
+        "value": "work@example.com"
+      },
+      {
+        "key": "user.name",
+        "value": "John Doe"
+      }
+    ]
+  }
+}`
+
+	err := os.WriteFile(legacyPath, []byte(legacy), 0o644)
+	is.NoErr(err)
+
+	src, dst, err := Migrate(false)
+	is.NoErr(err)
+	is.Equal(src, legacyPath)
+	is.Equal(dst, xdgPath)
+
+	body, err := os.ReadFile(xdgPath)
+	is.NoErr(err)
+
+	var decoded Config
+
+	err = json.Unmarshal(body, &decoded)
+	is.NoErr(err)
+	is.Equal(decoded.Profiles["work"]["user.email"], "work@example.com")
+	is.Equal(decoded.Profiles["work"]["user.name"], "John Doe")
+
+	// Legacy file must stay untouched.
+	legacyBody, err := os.ReadFile(legacyPath)
+	is.NoErr(err)
+	is.Equal(string(legacyBody), legacy)
+}
+
+func TestMigrateRequiresLegacy(t *testing.T) {
+	is := is.New(t)
+
+	home := t.TempDir()
+	t.Setenv("HOME", home)
+	t.Setenv("XDG_CONFIG_HOME", filepath.Join(home, "xdg"))
+
+	_, _, err := Migrate(false)
+	is.True(err != nil)
+	is.True(strings.Contains(err.Error(), "legacy config not found"))
+}
+
+func TestMigrateRefusesExistingXDG(t *testing.T) {
+	is := is.New(t)
+
+	home := t.TempDir()
+	xdgHome := filepath.Join(home, "xdg")
+	t.Setenv("HOME", home)
+	t.Setenv("XDG_CONFIG_HOME", xdgHome)
+
+	legacyPath := filepath.Join(home, ".gitprofile")
+	xdgPath := filepath.Join(xdgHome, "git-profile", "config.json")
+
+	err := os.WriteFile(legacyPath, []byte(`{"profiles":{"work":[{"key":"user.email","value":"a@b.c"}]}}`), 0o644)
+	is.NoErr(err)
+	err = os.MkdirAll(filepath.Dir(xdgPath), 0o755)
+	is.NoErr(err)
+	err = os.WriteFile(xdgPath, []byte(`{"profiles":{}}`), 0o644)
+	is.NoErr(err)
+
+	_, _, err = Migrate(false)
+	is.True(err != nil)
+	is.True(strings.Contains(err.Error(), "already exists"))
+
+	_, _, err = Migrate(true)
+	is.NoErr(err)
+
+	body, err := os.ReadFile(xdgPath)
+	is.NoErr(err)
+
+	var decoded Config
+
+	err = json.Unmarshal(body, &decoded)
+	is.NoErr(err)
+	is.Equal(decoded.Profiles["work"]["user.email"], "a@b.c")
+}
