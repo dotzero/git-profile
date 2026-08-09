@@ -41,6 +41,12 @@ Apply a profile in the current Git repository:
 git-profile use
 ```
 
+Apply a profile from outside the repository:
+
+```bash
+git-profile -C /path/to/repo use home
+```
+
 ## Usage
 
 ### `add`
@@ -145,37 +151,18 @@ Show the currently selected profile for the current repository:
 git-profile current
 ```
 
-### `export`
+## AI agents
 
-Export a profile as JSON:
-
-```bash
-git-profile export work
-git-profile export work > work.json
-```
-
-Example output:
-
-```json
-[
-  { "key": "user.name", "value": "John Doe" },
-  { "key": "user.email", "value": "work@example.com" },
-  { "key": "user.signingkey", "value": "AAAAAAAA" }
-]
-```
-
-### `import`
-
-Import a profile from JSON:
+Install the skill that teaches compatible coding agents to manage Git Profile safely:
 
 ```bash
-git-profile import work '[{"key":"user.name","value":"John Doe"},{"key":"user.email","value":"work@example.com"}]'
+npx skills add dotzero/git-profile
 ```
 
-If you already have JSON in a file:
+To install it globally for Codex without prompts:
 
 ```bash
-git-profile import work "$(cat work.json)"
+npx skills add dotzero/git-profile --skill git-profile --agent codex --global --yes
 ```
 
 ## Config file
@@ -248,4 +235,4 @@ git-profile completion fish > ~/.config/fish/completions/git-profile.fish
 
 ## License
 
-[MIT](http://www.opensource.org/licenses/mit-license.php)
+[MIT](https://opensource.org/license/mit)

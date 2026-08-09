@@ -23,9 +23,10 @@ type Cmd struct {
 	// CompileDate is the date of build
 	CompileDate string
 
-	filename string
-	config   *config.Config
-	git      *git.Git
+	filename  string
+	directory string
+	config    *config.Config
+	git       *git.Git
 }
 
 // New returns an app
@@ -79,6 +80,7 @@ func (c *Cmd) init() {
 		}
 
 		c.filename = filename
+		c.git.SetDir(c.directory)
 	}
 
 	c.AddCommand(
@@ -98,6 +100,10 @@ func (c *Cmd) init() {
 	c.SetOutput(os.Stdout)
 	c.SetErr(os.Stderr)
 
+	c.registerFlags()
+}
+
+func (c *Cmd) registerFlags() {
 	c.PersistentFlags().StringVarP(
 		&c.filename,
 		"config",
@@ -105,6 +111,7 @@ func (c *Cmd) init() {
 		"",
 		"config file (default: $XDG_CONFIG_HOME/git-profile/config.json or ~/.gitprofile)",
 	)
+	c.PersistentFlags().StringVarP(&c.directory, "directory", "C", "", "run git commands in the given path")
 }
 
 func resolveConfigPath(filename string) (string, error) {
