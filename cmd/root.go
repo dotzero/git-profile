@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 
 	"github.com/dotzero/git-profile/internal/config"
@@ -63,8 +62,12 @@ func (c *Cmd) Execute() {
 }
 
 func (c *Cmd) init() {
-	cobra.OnInitialize(func() {
-		filename, err := homedir.Expand(c.filename)
+	c.PersistentPreRun = func(cmd *cobra.Command, _ []string) {
+		if cmd.Name() == "migrate" {
+			return
+		}
+
+		filename, err := resolveConfigPath(c.filename)
 		if err != nil {
 			c.PrintErrln(err)
 			os.Exit(1)
@@ -78,7 +81,7 @@ func (c *Cmd) init() {
 
 		c.filename = filename
 		c.git.SetDir(c.directory)
-	})
+	}
 
 	c.AddCommand(
 		Add(c.config),
@@ -88,6 +91,7 @@ func (c *Cmd) init() {
 		List(c.config, c.git),
 		Export(c.config),
 		Import(c.config),
+		Migrate(),
 		Use(c.config, c.git),
 		Unuse(c.config, c.git),
 		Version(c),
@@ -100,8 +104,22 @@ func (c *Cmd) init() {
 }
 
 func (c *Cmd) registerFlags() {
-	c.PersistentFlags().StringVarP(&c.filename, "config", "c", "~/.gitprofile", "config file")
+	c.PersistentFlags().StringVarP(
+		&c.filename,
+		"config",
+		"c",
+		"",
+		"config file (default: $XDG_CONFIG_HOME/git-profile/config.json or ~/.gitprofile)",
+	)
 	c.PersistentFlags().StringVarP(&c.directory, "directory", "C", "", "run git commands in the given path")
+}
+
+func resolveConfigPath(filename string) (string, error) {
+	if filename == "" {
+		return config.DefaultPath()
+	}
+
+	return config.ExpandPath(filename)
 }
 
 func multiline(lines ...string) string {

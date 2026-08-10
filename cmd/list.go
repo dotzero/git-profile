@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"sort"
+
 	"github.com/spf13/cobra"
 
 	"github.com/dotzero/git-profile/internal/ui"
@@ -23,8 +25,16 @@ func List(cfg storage, v vcs) *cobra.Command {
 				ui.Println(cmd, ui.SuccessStyle, "- %s:", name)
 
 				profile, _ := cfg.Lookup(name)
-				for _, entry := range profile {
-					ui.Println(cmd, ui.DefaultStyle, "  %s: %s", entry.Key, entry.Value)
+
+				keys := make([]string, 0, len(profile))
+				for key := range profile {
+					keys = append(keys, key)
+				}
+
+				sort.Strings(keys)
+
+				for _, key := range keys {
+					ui.Println(cmd, ui.DefaultStyle, "  %s: %s", key, profile[key])
 				}
 			}
 		},

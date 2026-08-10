@@ -59,8 +59,8 @@ func profileUnapply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
 		os.Exit(0)
 	}
 
-	for _, entry := range entries {
-		err := v.Unset(entry.Key)
+	for key := range entries {
+		err := v.Unset(key)
 		if err != nil {
 			ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to interact with git to remove current profile: %s", err)
 			os.Exit(1)

@@ -19,9 +19,10 @@ func TestList(t *testing.T) {
 		NamesFunc: func() []string {
 			return []string{"home"}
 		},
-		LookupFunc: func(name string) ([]config.Entry, bool) {
-			return []config.Entry{
-				{Key: "user.email", Value: "work@example.com"},
+		LookupFunc: func(name string) (config.Entry, bool) {
+			return config.Entry{
+				"user.email":    "work@example.com",
+				"core.autocrlf": "input",
 			}, true
 		},
 	}
@@ -43,5 +44,5 @@ func TestList(t *testing.T) {
 	err := cmd.Execute()
 
 	is.NoErr(err)
-	is.Equal(trim(b.String()), "Available profiles:\n- home:\n  user.email: work@example.com")
+	is.Equal(trim(b.String()), "Available profiles:\n- home:\n  core.autocrlf: input\n  user.email: work@example.com")
 }

@@ -8,7 +8,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dotzero/git-profile/internal/config"
 	"github.com/dotzero/git-profile/internal/ui"
 )
 
@@ -112,10 +111,9 @@ func profileUpdateEntries(
 	}
 
 	if entries, ok := cfg.Lookup(profile); ok {
-		values := entriesToMap(entries)
-		formData.UserName = values[userNameKey]
-		formData.UserEmail = values[userEmailKey]
-		formData.UserSigningKey = values[userSigningKeyKey]
+		formData.UserName = entries[userNameKey]
+		formData.UserEmail = entries[userEmailKey]
+		formData.UserSigningKey = entries[userSigningKeyKey]
 	}
 
 	result, err := editProfileFields(formData, cmd.InOrStdin(), cmd.OutOrStdout())
@@ -123,11 +121,7 @@ func profileUpdateEntries(
 		return err
 	}
 
-	currentValues := map[string]string{}
-	if entries, ok := cfg.Lookup(result.Profile); ok {
-		currentValues = entriesToMap(entries)
-	}
-
+	currentValues, _ := cfg.Lookup(result.Profile)
 	changed := 0
 
 	values := map[string]string{
@@ -164,14 +158,4 @@ func profileUpdateEntries(
 	ui.Println(cmd, ui.SuccessStyle, "Successfully updated `%s` profile.\n", result.Profile)
 
 	return nil
-}
-
-func entriesToMap(entries []config.Entry) map[string]string {
-	values := make(map[string]string, len(entries))
-
-	for _, entry := range entries {
-		values[entry.Key] = entry.Value
-	}
-
-	return values
 }

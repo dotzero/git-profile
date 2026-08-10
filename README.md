@@ -167,13 +167,24 @@ npx skills add dotzero/git-profile --skill git-profile --agent codex --global --
 
 ## Config file
 
-By default, Git Profile stores profiles in:
+By default, Git Profile looks for profiles in this order:
+
+1. `$XDG_CONFIG_HOME/git-profile/config.json` (or `~/.config/git-profile/config.json`)
+2. `~/.gitprofile` (legacy path and array-based format)
+
+New installs create the XDG config file in the map-based format.
+Existing `~/.gitprofile` files stay in the legacy array-based format and are not rewritten in place.
+
+To copy a legacy config to the XDG path in map format:
 
 ```bash
-~/.gitprofile
+git-profile migrate
 ```
 
-You can override it with:
+The legacy file is kept. After migration, the XDG file takes priority.
+Use `--force` to overwrite an existing XDG config file.
+
+You can override the path with:
 
 ```bash
 git-profile --config /path/to/file add work user.email work@example.com
