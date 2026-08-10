@@ -23,11 +23,6 @@ func New() *OldConfig {
 	}
 }
 
-// Len returns number of profiles
-func (c *OldConfig) Len() int {
-	return len(c.Profiles)
-}
-
 // Save stores profiles to json file
 func (c *OldConfig) Save(filename string) error {
 	data, err := json.MarshalIndent(c, "", "  ")
@@ -36,21 +31,4 @@ func (c *OldConfig) Save(filename string) error {
 	}
 
 	return os.WriteFile(filename, data, 0o644) //nolint:gosec
-}
-
-// Load profiles from json file
-func (c *OldConfig) Load(filename string) (err error) {
-	if _, err = os.Stat(filename); os.IsNotExist(err) {
-		err = c.Save(filename)
-		if err != nil {
-			return err
-		}
-	}
-
-	body, err := os.ReadFile(filename) //nolint:gosec
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(body, c)
 }

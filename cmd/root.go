@@ -111,7 +111,13 @@ func (c *Cmd) registerFlags() {
 		"",
 		"config file (default: $XDG_CONFIG_HOME/git-profile/config.json or ~/.gitprofile)",
 	)
-	c.PersistentFlags().StringVarP(&c.directory, "directory", "C", "", "run git commands in the given path")
+	c.PersistentFlags().StringVarP(
+		&c.directory,
+		"directory",
+		"C",
+		"",
+		"run git commands in the given path",
+	)
 }
 
 func resolveConfigPath(filename string) (string, error) {

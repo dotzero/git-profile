@@ -62,16 +62,6 @@ func DefaultPath() (string, error) {
 	return xdgPath, nil
 }
 
-// XDGPath returns $XDG_CONFIG_HOME/git-profile/config.json.
-func XDGPath() (string, error) {
-	return xdgConfigPath()
-}
-
-// LegacyPath returns ~/.gitprofile.
-func LegacyPath() (string, error) {
-	return legacyConfigPath()
-}
-
 // Migrate copies ~/.gitprofile to the XDG path in map format.
 // It does not remove the legacy file. If the XDG file already exists,
 // set force to overwrite it.
