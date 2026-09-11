@@ -6,10 +6,12 @@ import (
 	"github.com/dotzero/git-profile/internal/ui"
 )
 
+const versionCommandName = "version"
+
 // Version returns `version` command
 func Version(c *Cmd) *cobra.Command {
 	return &cobra.Command{
-		Use:     "version",
+		Use:     versionCommandName,
 		Short:   "Print version information",
 		Long:    "Print the version, commit hash, and build date.",
 		Example: "git-profile version",

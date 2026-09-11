@@ -6,10 +6,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	completionCommandName = "completion"
+	bashShell             = "bash"
+	zshShell              = "zsh"
+	fishShell             = "fish"
+	powershellShell       = "powershell"
+)
+
 // Completion returns `completion` command
 func Completion(rootCmd *cobra.Command) *cobra.Command {
 	return &cobra.Command{
-		Use:   "completion [bash|zsh|fish|powershell]",
+		Use:   completionCommandName + " [bash|zsh|fish|powershell]",
 		Short: "Generate shell completion script",
 		Long: `Generate shell completion script for Git Profile.
 
@@ -44,18 +52,18 @@ Fish:
   # To load completions for each session, execute once:
   $ git-profile completion fish > ~/.config/fish/completions/git-profile.fish
 `,
-		ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+		ValidArgs:             []string{bashShell, zshShell, fishShell, powershellShell},
 		Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 		DisableFlagsInUseLine: true,
 		Run: func(_ *cobra.Command, args []string) {
 			switch args[0] {
-			case "bash":
+			case bashShell:
 				_ = rootCmd.GenBashCompletionV2(os.Stdout, true)
-			case "zsh":
+			case zshShell:
 				_ = rootCmd.GenZshCompletion(os.Stdout)
-			case "fish":
+			case fishShell:
 				_ = rootCmd.GenFishCompletion(os.Stdout, true)
-			case "powershell":
+			case powershellShell:
 				_ = rootCmd.GenPowerShellCompletionWithDesc(os.Stdout)
 			}
 		},

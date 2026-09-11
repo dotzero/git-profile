@@ -9,12 +9,14 @@ import (
 	"github.com/dotzero/git-profile/internal/ui"
 )
 
+const migrateCommandName = "migrate"
+
 // Migrate returns `migrate` command
 func Migrate() *cobra.Command {
 	var force bool
 
 	cmd := &cobra.Command{
-		Use:   "migrate",
+		Use:   migrateCommandName,
 		Short: "Migrate ~/.gitprofile to the XDG config path",
 		Long: multiline(
 			"Copy ~/.gitprofile to $XDG_CONFIG_HOME/git-profile/config.json.",

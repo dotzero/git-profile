@@ -64,7 +64,7 @@ func (c *Cmd) Execute() {
 func (c *Cmd) init() {
 	c.PersistentPreRun = func(cmd *cobra.Command, _ []string) {
 		switch cmd.Name() {
-		case "migrate", "version", "completion":
+		case migrateCommandName, versionCommandName, completionCommandName:
 			return
 		}
 
