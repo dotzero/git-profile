@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/dotzero/git-profile/internal/config"
 	"github.com/dotzero/git-profile/internal/ui"
 )
 
@@ -70,7 +71,13 @@ func profileApply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
 		os.Exit(0)
 	}
 
-	err := v.Set(currentProfileKey, profile)
+	err := profileCleanupCurrent(cfg, v, entries)
+	if err != nil {
+		ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to interact with git to remove previous profile settings: %s", err)
+		os.Exit(1)
+	}
+
+	err = v.Set(currentProfileKey, profile)
 	if err != nil {
 		ui.PrintErrln(cmd, ui.ErrorStyle, "Unable to interact with git to store current profile: %s", err)
 		os.Exit(1)
@@ -85,4 +92,24 @@ func profileApply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
 	}
 
 	ui.Println(cmd, ui.SuccessStyle, "Successfully applied `%s` profile to current git repository.", profile)
+}
+
+func profileCleanupCurrent(cfg storage, v vcs, entries config.Entry) error {
+	previous, err := v.Get(currentProfileKey)
+	if err != nil {
+		return nil
+	}
+
+	previousEntries, _ := cfg.Lookup(previous)
+	for key := range previousEntries {
+		if _, ok := entries[key]; ok {
+			continue
+		}
+
+		if err := v.Unset(key); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

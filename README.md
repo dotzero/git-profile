@@ -111,6 +111,8 @@ git config --local user.email work@example.com
 git config --local user.signingkey AAAAAAAA
 ```
 
+When switching profiles, Git Profile removes local keys listed in the previous profile that are absent from the selected profile.
+
 Run without arguments to select a profile interactively:
 
 ```bash
