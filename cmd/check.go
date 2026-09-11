@@ -10,7 +10,10 @@ import (
 
 func check(cmd *cobra.Command, cfg storage, v vcs) {
 	checkRepository(cmd, v)
+	checkProfiles(cmd, cfg)
+}
 
+func checkProfiles(cmd *cobra.Command, cfg storage) {
 	if cfg.Len() == 0 {
 		ui.PrintErrln(cmd, ui.ErrorStyle, `There are no available profiles.`)
 		ui.Println(cmd, ui.SuccessStyle, `To add a new profile, use the following command:`)

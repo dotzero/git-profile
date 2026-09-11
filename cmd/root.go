@@ -88,7 +88,7 @@ func (c *Cmd) init() {
 		Completion(&c.Command),
 		Current(c.config, c.git),
 		Del(c.config),
-		List(c.config, c.git),
+		List(c.config),
 		Export(c.config),
 		Import(c.config),
 		Migrate(),

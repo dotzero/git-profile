@@ -117,6 +117,27 @@ func TestUnuseWithoutCurrentProfileExitCode(t *testing.T) {
 	}
 }
 
+func TestUseAndUnuseRequireRepository(t *testing.T) {
+	for _, args := range [][]string{{"use", "work"}, {"unuse", "work"}, {"use"}, {"unuse"}} {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			is := is.New(t)
+			_, filename := setupCLIExitTest(t, false)
+			outsideDir := t.TempDir()
+			child := cliExitTestCommand(outsideDir, filename, args...)
+			child.Dir = outsideDir
+
+			var stdout, stderr bytes.Buffer
+
+			child.Stdout = &stdout
+			child.Stderr = &stderr
+			is.True(child.Run() != nil)
+			is.Equal(child.ProcessState.ExitCode(), 1)
+			is.Equal(stdout.String(), "")
+			is.True(strings.Contains(stderr.String(), "not a valid git repository"))
+		})
+	}
+}
+
 func cliExitTestCommand(repo, filename string, args ...string) *exec.Cmd {
 	childArgs := append([]string{"-test.run=^TestCLIProcess$", "--", "--config", filename, "-C", repo}, args...)
 	child := exec.Command(os.Args[0], childArgs...)
