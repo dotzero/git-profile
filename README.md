@@ -132,9 +132,9 @@ git-profile unuse work
 Under the hood, this unsets the local Git config values, for example:
 
 ```bash
-git config --local --unset user.name
-git config --local --unset user.email
-git config --local --unset user.signingkey
+git config --local --unset-all user.name
+git config --local --unset-all user.email
+git config --local --unset-all user.signingkey
 ```
 
 Run without arguments to remove the currently applied profile:

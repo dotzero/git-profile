@@ -7,7 +7,7 @@ import (
 )
 
 // gitConfigKeyNotFound is the exit code git returns from
-// `git config --unset` when the key is not present.
+// `git config --unset-all` when the key is not present.
 const gitConfigKeyNotFound = 5
 
 // Git is a vcs
@@ -49,10 +49,10 @@ func (g *Git) Set(key string, value string) error {
 	return err
 }
 
-// Unset removes a key from git local config.
+// Unset removes all values of a key from git local config.
 // A missing key is not treated as an error.
 func (g *Git) Unset(key string) error {
-	_, err := g.command("config", "--local", "--unset", key).CombinedOutput()
+	_, err := g.command("config", "--local", "--unset-all", key).CombinedOutput()
 	if err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) && exitErr.ExitCode() == gitConfigKeyNotFound {
