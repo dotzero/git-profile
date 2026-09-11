@@ -30,7 +30,12 @@ func useCommand(
 			`git-profile use`,
 			`git-profile use my-profile`,
 		),
-		PreRun: func(cmd *cobra.Command, _ []string) {
+		PreRun: func(cmd *cobra.Command, args []string) {
+			if len(args) > 0 {
+				checkRepository(cmd, v)
+				return
+			}
+
 			check(cmd, cfg, v)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
@@ -68,7 +73,7 @@ func profileApply(cmd *cobra.Command, cfg storage, v vcs, profile string) {
 	entries, ok := cfg.Lookup(profile)
 	if !ok {
 		ui.PrintErrln(cmd, ui.ErrorStyle, "There is no profile with `%s` name", profile)
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	err := profileCleanupCurrent(cfg, v, entries)

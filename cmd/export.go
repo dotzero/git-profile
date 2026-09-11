@@ -24,7 +24,7 @@ func Export(cfg storage) *cobra.Command {
 			entries, ok := cfg.Lookup(profile)
 			if !ok {
 				ui.PrintErrln(cmd, ui.ErrorStyle, "There is no profile with `%s` name", profile)
-				os.Exit(0)
+				os.Exit(1)
 			}
 
 			data, err := json.Marshal(entries)
