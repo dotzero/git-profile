@@ -2,12 +2,11 @@ GOBIN ?= $(shell go env GOPATH)/bin
 PKG = github.com/dotzero/git-profile
 BIN := git-profile
 
-VERSION := 1.9.1
 HASH := $(shell git rev-parse --short HEAD)
 DATE := $(shell date +%FT%T%z)
 
 LDFLAGS := "-s -w \
-	-X main.Version=$(VERSION) \
+	$(if $(strip $(VERSION)),-X main.Version=$(VERSION)) \
 	-X main.CommitHash=$(HASH) \
 	-X main.CompileDate=$(DATE)"
 
@@ -25,10 +24,13 @@ lint:
 clean:
 	if [ -f $(GOBIN)/$(BIN) ] ; then rm -f $(GOBIN)/$(BIN) ; fi
 
-dist-check:
-	goreleaser release --snapshot --clean
+require-version:
+	@test -n "$(strip $(VERSION))" || { echo "VERSION is required (e.g. make dist-check VERSION=1.9.2)" >&2; exit 1; }
 
-dist-release:
+dist-check: require-version
+	GORELEASER_CURRENT_TAG=v$(VERSION) goreleaser release --snapshot --clean
+
+dist-release: require-version
 	goreleaser release --clean
 
-.PHONY: all build test lint clean dist-check dist-release
+.PHONY: all build test lint clean require-version dist-check dist-release
