@@ -98,7 +98,7 @@ func (c *Cmd) init() {
 		Version(c),
 	)
 
-	c.SetOutput(os.Stdout)
+	c.SetOut(os.Stdout)
 	c.SetErr(os.Stderr)
 
 	c.registerFlags()
